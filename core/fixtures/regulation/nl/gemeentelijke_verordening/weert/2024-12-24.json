@@ -1,0 +1,108 @@
+{
+  "id": "nl-weert-2024-12-24",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "period": "calendar_quarter",
+    "minimum_assessment_amount": {
+      "amount": 5,
+      "currency": "EUR"
+    },
+    "notes": "Assessment period inferred from the belastingtijdvak article. Minimum assessment amount inferred from the aanslaggrens article."
+  },
+  "rules": [
+    {
+      "id": "2024-12-24-rate-1",
+      "municipality_code": "0988",
+      "municipality_name": "Weert",
+      "region_code": "",
+      "valid_from": "2024-12-24",
+      "valid_to": "2025-12-19",
+      "applies_to": {
+        "accommodation_types": []
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 2.67
+        },
+        "currency": "EUR"
+      },
+      "predicates": [],
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR731675/1",
+        "cvdr_id": "CVDR731675",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "reviewed_at": null,
+        "reviewer": ""
+      },
+      "confidence": "scraped",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 5."
+    },
+    {
+      "id": "2024-12-24-rate-2",
+      "municipality_code": "0988",
+      "municipality_name": "Weert",
+      "region_code": "",
+      "valid_from": "2024-12-24",
+      "valid_to": "2025-12-19",
+      "applies_to": {
+        "accommodation_types": [
+          "camping"
+        ]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.7
+        },
+        "currency": "EUR"
+      },
+      "predicates": [],
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR731675/1",
+        "cvdr_id": "CVDR731675",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "reviewed_at": null,
+        "reviewer": ""
+      },
+      "confidence": "scraped",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 5."
+    }
+  ]
+}

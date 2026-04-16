@@ -1,0 +1,61 @@
+{
+  "id": "nl-rijswijk-2025-11-28",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "minimum_assessment_amount": null,
+    "notes": "Assessment period inferred from the belastingtijdvak article.",
+    "period": "calendar_quarter"
+  },
+  "rules": [
+    {
+      "applies_to": {
+        "accommodation_types": []
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 3.7
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "id": "2025-11-28-rate-1",
+      "municipality_code": "0603",
+      "municipality_name": "Rijswijk",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 5",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR748121",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR748121/1"
+      },
+      "valid_from": "2025-11-28",
+      "valid_to": null
+    }
+  ]
+}

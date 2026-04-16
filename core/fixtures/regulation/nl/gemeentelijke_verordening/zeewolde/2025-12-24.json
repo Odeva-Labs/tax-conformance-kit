@@ -1,0 +1,111 @@
+{
+  "id": "nl-zeewolde-2025-12-24",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "minimum_assessment_amount": null,
+    "notes": "Assessment period inferred from the belastingtijdvak article.",
+    "period": "calendar_year"
+  },
+  "rules": [
+    {
+      "applies_to": {
+        "accommodation_types": [
+          "hotel"
+        ]
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 3.4
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        },
+        {
+          "kind": "cross_tax.already_subject_to",
+          "params": {
+            "tax": "forensenbelasting"
+          }
+        }
+      ],
+      "id": "2025-12-24-rate-1",
+      "municipality_code": "0050",
+      "municipality_name": "Zeewolde",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 8.",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR752939",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752939/1"
+      },
+      "valid_from": "2025-12-24",
+      "valid_to": null
+    },
+    {
+      "applies_to": {
+        "accommodation_types": [
+          "camping"
+        ]
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.37
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        },
+        {
+          "kind": "cross_tax.already_subject_to",
+          "params": {
+            "tax": "forensenbelasting"
+          }
+        }
+      ],
+      "id": "2025-12-24-rate-2",
+      "municipality_code": "0050",
+      "municipality_name": "Zeewolde",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 8.",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR752939",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752939/1"
+      },
+      "valid_from": "2025-12-24",
+      "valid_to": null
+    }
+  ]
+}

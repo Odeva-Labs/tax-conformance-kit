@@ -1,0 +1,1382 @@
+{
+  "schema_version": "1",
+  "country_code": "NL",
+  "imported_at": "2026-04-17T12:34:01Z",
+  "source": {
+    "kind": "cbs_statline_zip",
+    "dataset_id": "86247NED",
+    "reference_year": "2026",
+    "source_url": "https://datasets.cbs.nl/CSV/CBS/nl/86247NED",
+    "archive_path": "/tmp/cbs86247.zip"
+  },
+  "municipalities": [
+    {
+      "code": "0014",
+      "name": "Groningen (gemeente)"
+    },
+    {
+      "code": "0034",
+      "name": "Almere"
+    },
+    {
+      "code": "0037",
+      "name": "Stadskanaal"
+    },
+    {
+      "code": "0047",
+      "name": "Veendam"
+    },
+    {
+      "code": "0050",
+      "name": "Zeewolde"
+    },
+    {
+      "code": "0059",
+      "name": "Achtkarspelen"
+    },
+    {
+      "code": "0060",
+      "name": "Ameland"
+    },
+    {
+      "code": "0072",
+      "name": "Harlingen"
+    },
+    {
+      "code": "0074",
+      "name": "Heerenveen"
+    },
+    {
+      "code": "0080",
+      "name": "Leeuwarden"
+    },
+    {
+      "code": "0085",
+      "name": "Ooststellingwerf"
+    },
+    {
+      "code": "0086",
+      "name": "Opsterland"
+    },
+    {
+      "code": "0088",
+      "name": "Schiermonnikoog"
+    },
+    {
+      "code": "0090",
+      "name": "Smallingerland"
+    },
+    {
+      "code": "0093",
+      "name": "Terschelling"
+    },
+    {
+      "code": "0096",
+      "name": "Vlieland"
+    },
+    {
+      "code": "0098",
+      "name": "Weststellingwerf"
+    },
+    {
+      "code": "0106",
+      "name": "Assen"
+    },
+    {
+      "code": "0109",
+      "name": "Coevorden"
+    },
+    {
+      "code": "0114",
+      "name": "Emmen"
+    },
+    {
+      "code": "0118",
+      "name": "Hoogeveen"
+    },
+    {
+      "code": "0119",
+      "name": "Meppel"
+    },
+    {
+      "code": "0141",
+      "name": "Almelo"
+    },
+    {
+      "code": "0147",
+      "name": "Borne"
+    },
+    {
+      "code": "0148",
+      "name": "Dalfsen"
+    },
+    {
+      "code": "0150",
+      "name": "Deventer"
+    },
+    {
+      "code": "0153",
+      "name": "Enschede"
+    },
+    {
+      "code": "0158",
+      "name": "Haaksbergen"
+    },
+    {
+      "code": "0160",
+      "name": "Hardenberg"
+    },
+    {
+      "code": "0163",
+      "name": "Hellendoorn"
+    },
+    {
+      "code": "0164",
+      "name": "Hengelo (O.)"
+    },
+    {
+      "code": "0166",
+      "name": "Kampen"
+    },
+    {
+      "code": "0168",
+      "name": "Losser"
+    },
+    {
+      "code": "0171",
+      "name": "Noordoostpolder"
+    },
+    {
+      "code": "0173",
+      "name": "Oldenzaal"
+    },
+    {
+      "code": "0175",
+      "name": "Ommen"
+    },
+    {
+      "code": "0177",
+      "name": "Raalte"
+    },
+    {
+      "code": "0180",
+      "name": "Staphorst"
+    },
+    {
+      "code": "0183",
+      "name": "Tubbergen"
+    },
+    {
+      "code": "0184",
+      "name": "Urk"
+    },
+    {
+      "code": "0189",
+      "name": "Wierden"
+    },
+    {
+      "code": "0193",
+      "name": "Zwolle"
+    },
+    {
+      "code": "0197",
+      "name": "Aalten"
+    },
+    {
+      "code": "0200",
+      "name": "Apeldoorn"
+    },
+    {
+      "code": "0202",
+      "name": "Arnhem"
+    },
+    {
+      "code": "0203",
+      "name": "Barneveld"
+    },
+    {
+      "code": "0209",
+      "name": "Beuningen"
+    },
+    {
+      "code": "0213",
+      "name": "Brummen"
+    },
+    {
+      "code": "0214",
+      "name": "Buren"
+    },
+    {
+      "code": "0216",
+      "name": "Culemborg"
+    },
+    {
+      "code": "0221",
+      "name": "Doesburg"
+    },
+    {
+      "code": "0222",
+      "name": "Doetinchem"
+    },
+    {
+      "code": "0225",
+      "name": "Druten"
+    },
+    {
+      "code": "0226",
+      "name": "Duiven"
+    },
+    {
+      "code": "0228",
+      "name": "Ede"
+    },
+    {
+      "code": "0230",
+      "name": "Elburg"
+    },
+    {
+      "code": "0232",
+      "name": "Epe"
+    },
+    {
+      "code": "0233",
+      "name": "Ermelo"
+    },
+    {
+      "code": "0243",
+      "name": "Harderwijk"
+    },
+    {
+      "code": "0244",
+      "name": "Hattem"
+    },
+    {
+      "code": "0246",
+      "name": "Heerde"
+    },
+    {
+      "code": "0252",
+      "name": "Heumen"
+    },
+    {
+      "code": "0262",
+      "name": "Lochem"
+    },
+    {
+      "code": "0263",
+      "name": "Maasdriel"
+    },
+    {
+      "code": "0267",
+      "name": "Nijkerk"
+    },
+    {
+      "code": "0268",
+      "name": "Nijmegen"
+    },
+    {
+      "code": "0269",
+      "name": "Oldebroek"
+    },
+    {
+      "code": "0273",
+      "name": "Putten"
+    },
+    {
+      "code": "0274",
+      "name": "Renkum"
+    },
+    {
+      "code": "0275",
+      "name": "Rheden"
+    },
+    {
+      "code": "0277",
+      "name": "Rozendaal"
+    },
+    {
+      "code": "0279",
+      "name": "Scherpenzeel"
+    },
+    {
+      "code": "0281",
+      "name": "Tiel"
+    },
+    {
+      "code": "0285",
+      "name": "Voorst"
+    },
+    {
+      "code": "0289",
+      "name": "Wageningen"
+    },
+    {
+      "code": "0293",
+      "name": "Westervoort"
+    },
+    {
+      "code": "0294",
+      "name": "Winterswijk"
+    },
+    {
+      "code": "0296",
+      "name": "Wijchen"
+    },
+    {
+      "code": "0297",
+      "name": "Zaltbommel"
+    },
+    {
+      "code": "0299",
+      "name": "Zevenaar"
+    },
+    {
+      "code": "0301",
+      "name": "Zutphen"
+    },
+    {
+      "code": "0302",
+      "name": "Nunspeet"
+    },
+    {
+      "code": "0303",
+      "name": "Dronten"
+    },
+    {
+      "code": "0307",
+      "name": "Amersfoort"
+    },
+    {
+      "code": "0308",
+      "name": "Baarn"
+    },
+    {
+      "code": "0310",
+      "name": "De Bilt"
+    },
+    {
+      "code": "0312",
+      "name": "Bunnik"
+    },
+    {
+      "code": "0313",
+      "name": "Bunschoten"
+    },
+    {
+      "code": "0317",
+      "name": "Eemnes"
+    },
+    {
+      "code": "0321",
+      "name": "Houten"
+    },
+    {
+      "code": "0327",
+      "name": "Leusden"
+    },
+    {
+      "code": "0331",
+      "name": "Lopik"
+    },
+    {
+      "code": "0335",
+      "name": "Montfoort"
+    },
+    {
+      "code": "0339",
+      "name": "Renswoude"
+    },
+    {
+      "code": "0340",
+      "name": "Rhenen"
+    },
+    {
+      "code": "0342",
+      "name": "Soest"
+    },
+    {
+      "code": "0344",
+      "name": "Utrecht (gemeente)"
+    },
+    {
+      "code": "0345",
+      "name": "Veenendaal"
+    },
+    {
+      "code": "0351",
+      "name": "Woudenberg"
+    },
+    {
+      "code": "0352",
+      "name": "Wijk bij Duurstede"
+    },
+    {
+      "code": "0353",
+      "name": "IJsselstein"
+    },
+    {
+      "code": "0355",
+      "name": "Zeist"
+    },
+    {
+      "code": "0356",
+      "name": "Nieuwegein"
+    },
+    {
+      "code": "0358",
+      "name": "Aalsmeer"
+    },
+    {
+      "code": "0361",
+      "name": "Alkmaar"
+    },
+    {
+      "code": "0362",
+      "name": "Amstelveen"
+    },
+    {
+      "code": "0363",
+      "name": "Amsterdam"
+    },
+    {
+      "code": "0373",
+      "name": "Bergen (NH.)"
+    },
+    {
+      "code": "0375",
+      "name": "Beverwijk"
+    },
+    {
+      "code": "0376",
+      "name": "Blaricum"
+    },
+    {
+      "code": "0377",
+      "name": "Bloemendaal"
+    },
+    {
+      "code": "0383",
+      "name": "Castricum"
+    },
+    {
+      "code": "0384",
+      "name": "Diemen"
+    },
+    {
+      "code": "0385",
+      "name": "Edam-Volendam"
+    },
+    {
+      "code": "0388",
+      "name": "Enkhuizen"
+    },
+    {
+      "code": "0392",
+      "name": "Haarlem"
+    },
+    {
+      "code": "0394",
+      "name": "Haarlemmermeer"
+    },
+    {
+      "code": "0396",
+      "name": "Heemskerk"
+    },
+    {
+      "code": "0397",
+      "name": "Heemstede"
+    },
+    {
+      "code": "0399",
+      "name": "Heiloo"
+    },
+    {
+      "code": "0400",
+      "name": "Den Helder"
+    },
+    {
+      "code": "0402",
+      "name": "Hilversum"
+    },
+    {
+      "code": "0405",
+      "name": "Hoorn"
+    },
+    {
+      "code": "0406",
+      "name": "Huizen"
+    },
+    {
+      "code": "0415",
+      "name": "Landsmeer"
+    },
+    {
+      "code": "0417",
+      "name": "Laren (NH.)"
+    },
+    {
+      "code": "0420",
+      "name": "Medemblik"
+    },
+    {
+      "code": "0431",
+      "name": "Oostzaan"
+    },
+    {
+      "code": "0432",
+      "name": "Opmeer"
+    },
+    {
+      "code": "0437",
+      "name": "Ouder-Amstel"
+    },
+    {
+      "code": "0439",
+      "name": "Purmerend"
+    },
+    {
+      "code": "0441",
+      "name": "Schagen"
+    },
+    {
+      "code": "0448",
+      "name": "Texel"
+    },
+    {
+      "code": "0450",
+      "name": "Uitgeest"
+    },
+    {
+      "code": "0451",
+      "name": "Uithoorn"
+    },
+    {
+      "code": "0453",
+      "name": "Velsen"
+    },
+    {
+      "code": "0473",
+      "name": "Zandvoort"
+    },
+    {
+      "code": "0479",
+      "name": "Zaanstad"
+    },
+    {
+      "code": "0482",
+      "name": "Alblasserdam"
+    },
+    {
+      "code": "0484",
+      "name": "Alphen aan den Rijn"
+    },
+    {
+      "code": "0489",
+      "name": "Barendrecht"
+    },
+    {
+      "code": "0498",
+      "name": "Drechterland"
+    },
+    {
+      "code": "0502",
+      "name": "Capelle aan den IJssel"
+    },
+    {
+      "code": "0503",
+      "name": "Delft"
+    },
+    {
+      "code": "0505",
+      "name": "Dordrecht"
+    },
+    {
+      "code": "0512",
+      "name": "Gorinchem"
+    },
+    {
+      "code": "0513",
+      "name": "Gouda"
+    },
+    {
+      "code": "0518",
+      "name": "'s-Gravenhage (gemeente)"
+    },
+    {
+      "code": "0523",
+      "name": "Hardinxveld-Giessendam"
+    },
+    {
+      "code": "0531",
+      "name": "Hendrik-Ido-Ambacht"
+    },
+    {
+      "code": "0532",
+      "name": "Stede Broec"
+    },
+    {
+      "code": "0534",
+      "name": "Hillegom"
+    },
+    {
+      "code": "0537",
+      "name": "Katwijk"
+    },
+    {
+      "code": "0542",
+      "name": "Krimpen aan den IJssel"
+    },
+    {
+      "code": "0546",
+      "name": "Leiden"
+    },
+    {
+      "code": "0547",
+      "name": "Leiderdorp"
+    },
+    {
+      "code": "0553",
+      "name": "Lisse"
+    },
+    {
+      "code": "0556",
+      "name": "Maassluis"
+    },
+    {
+      "code": "0569",
+      "name": "Nieuwkoop"
+    },
+    {
+      "code": "0575",
+      "name": "Noordwijk"
+    },
+    {
+      "code": "0579",
+      "name": "Oegstgeest"
+    },
+    {
+      "code": "0589",
+      "name": "Oudewater"
+    },
+    {
+      "code": "0590",
+      "name": "Papendrecht"
+    },
+    {
+      "code": "0597",
+      "name": "Ridderkerk"
+    },
+    {
+      "code": "0599",
+      "name": "Rotterdam"
+    },
+    {
+      "code": "0603",
+      "name": "Rijswijk (ZH.)"
+    },
+    {
+      "code": "0606",
+      "name": "Schiedam"
+    },
+    {
+      "code": "0610",
+      "name": "Sliedrecht"
+    },
+    {
+      "code": "0613",
+      "name": "Albrandswaard"
+    },
+    {
+      "code": "0622",
+      "name": "Vlaardingen"
+    },
+    {
+      "code": "0626",
+      "name": "Voorschoten"
+    },
+    {
+      "code": "0627",
+      "name": "Waddinxveen"
+    },
+    {
+      "code": "0629",
+      "name": "Wassenaar"
+    },
+    {
+      "code": "0632",
+      "name": "Woerden"
+    },
+    {
+      "code": "0637",
+      "name": "Zoetermeer"
+    },
+    {
+      "code": "0638",
+      "name": "Zoeterwoude"
+    },
+    {
+      "code": "0642",
+      "name": "Zwijndrecht"
+    },
+    {
+      "code": "0654",
+      "name": "Borsele"
+    },
+    {
+      "code": "0664",
+      "name": "Goes"
+    },
+    {
+      "code": "0668",
+      "name": "West Maas en Waal"
+    },
+    {
+      "code": "0677",
+      "name": "Hulst"
+    },
+    {
+      "code": "0678",
+      "name": "Kapelle"
+    },
+    {
+      "code": "0687",
+      "name": "Middelburg (Z.)"
+    },
+    {
+      "code": "0703",
+      "name": "Reimerswaal"
+    },
+    {
+      "code": "0715",
+      "name": "Terneuzen"
+    },
+    {
+      "code": "0716",
+      "name": "Tholen"
+    },
+    {
+      "code": "0717",
+      "name": "Veere"
+    },
+    {
+      "code": "0718",
+      "name": "Vlissingen"
+    },
+    {
+      "code": "0736",
+      "name": "De Ronde Venen"
+    },
+    {
+      "code": "0737",
+      "name": "Tytsjerksteradiel"
+    },
+    {
+      "code": "0743",
+      "name": "Asten"
+    },
+    {
+      "code": "0744",
+      "name": "Baarle-Nassau"
+    },
+    {
+      "code": "0748",
+      "name": "Bergen op Zoom"
+    },
+    {
+      "code": "0753",
+      "name": "Best"
+    },
+    {
+      "code": "0755",
+      "name": "Boekel"
+    },
+    {
+      "code": "0757",
+      "name": "Boxtel"
+    },
+    {
+      "code": "0758",
+      "name": "Breda"
+    },
+    {
+      "code": "0762",
+      "name": "Deurne"
+    },
+    {
+      "code": "0765",
+      "name": "Pekela"
+    },
+    {
+      "code": "0766",
+      "name": "Dongen"
+    },
+    {
+      "code": "0770",
+      "name": "Eersel"
+    },
+    {
+      "code": "0772",
+      "name": "Eindhoven"
+    },
+    {
+      "code": "0777",
+      "name": "Etten-Leur"
+    },
+    {
+      "code": "0779",
+      "name": "Geertruidenberg"
+    },
+    {
+      "code": "0784",
+      "name": "Gilze en Rijen"
+    },
+    {
+      "code": "0785",
+      "name": "Goirle"
+    },
+    {
+      "code": "0794",
+      "name": "Helmond"
+    },
+    {
+      "code": "0796",
+      "name": "'s-Hertogenbosch"
+    },
+    {
+      "code": "0797",
+      "name": "Heusden"
+    },
+    {
+      "code": "0798",
+      "name": "Hilvarenbeek"
+    },
+    {
+      "code": "0809",
+      "name": "Loon op Zand"
+    },
+    {
+      "code": "0820",
+      "name": "Nuenen, Gerwen en Nederwetten"
+    },
+    {
+      "code": "0823",
+      "name": "Oirschot"
+    },
+    {
+      "code": "0824",
+      "name": "Oisterwijk"
+    },
+    {
+      "code": "0826",
+      "name": "Oosterhout"
+    },
+    {
+      "code": "0828",
+      "name": "Oss"
+    },
+    {
+      "code": "0840",
+      "name": "Rucphen"
+    },
+    {
+      "code": "0845",
+      "name": "Sint-Michielsgestel"
+    },
+    {
+      "code": "0847",
+      "name": "Someren"
+    },
+    {
+      "code": "0848",
+      "name": "Son en Breugel"
+    },
+    {
+      "code": "0851",
+      "name": "Steenbergen"
+    },
+    {
+      "code": "0852",
+      "name": "Waterland"
+    },
+    {
+      "code": "0855",
+      "name": "Tilburg"
+    },
+    {
+      "code": "0858",
+      "name": "Valkenswaard"
+    },
+    {
+      "code": "0861",
+      "name": "Veldhoven"
+    },
+    {
+      "code": "0865",
+      "name": "Vught"
+    },
+    {
+      "code": "0866",
+      "name": "Waalre"
+    },
+    {
+      "code": "0867",
+      "name": "Waalwijk"
+    },
+    {
+      "code": "0873",
+      "name": "Woensdrecht"
+    },
+    {
+      "code": "0879",
+      "name": "Zundert"
+    },
+    {
+      "code": "0880",
+      "name": "Wormerland"
+    },
+    {
+      "code": "0882",
+      "name": "Landgraaf"
+    },
+    {
+      "code": "0888",
+      "name": "Beek (L.)"
+    },
+    {
+      "code": "0889",
+      "name": "Beesel"
+    },
+    {
+      "code": "0893",
+      "name": "Bergen (L.)"
+    },
+    {
+      "code": "0899",
+      "name": "Brunssum"
+    },
+    {
+      "code": "0907",
+      "name": "Gennep"
+    },
+    {
+      "code": "0917",
+      "name": "Heerlen"
+    },
+    {
+      "code": "0928",
+      "name": "Kerkrade"
+    },
+    {
+      "code": "0935",
+      "name": "Maastricht"
+    },
+    {
+      "code": "0938",
+      "name": "Meerssen"
+    },
+    {
+      "code": "0944",
+      "name": "Mook en Middelaar"
+    },
+    {
+      "code": "0946",
+      "name": "Nederweert"
+    },
+    {
+      "code": "0957",
+      "name": "Roermond"
+    },
+    {
+      "code": "0965",
+      "name": "Simpelveld"
+    },
+    {
+      "code": "0971",
+      "name": "Stein (L.)"
+    },
+    {
+      "code": "0981",
+      "name": "Vaals"
+    },
+    {
+      "code": "0983",
+      "name": "Venlo"
+    },
+    {
+      "code": "0984",
+      "name": "Venray"
+    },
+    {
+      "code": "0986",
+      "name": "Voerendaal"
+    },
+    {
+      "code": "0988",
+      "name": "Weert"
+    },
+    {
+      "code": "0994",
+      "name": "Valkenburg aan de Geul"
+    },
+    {
+      "code": "0995",
+      "name": "Lelystad"
+    },
+    {
+      "code": "1507",
+      "name": "Horst aan de Maas"
+    },
+    {
+      "code": "1509",
+      "name": "Oude IJsselstreek"
+    },
+    {
+      "code": "1525",
+      "name": "Teylingen"
+    },
+    {
+      "code": "1581",
+      "name": "Utrechtse Heuvelrug"
+    },
+    {
+      "code": "1586",
+      "name": "Oost Gelre"
+    },
+    {
+      "code": "1598",
+      "name": "Koggenland"
+    },
+    {
+      "code": "1621",
+      "name": "Lansingerland"
+    },
+    {
+      "code": "1640",
+      "name": "Leudal"
+    },
+    {
+      "code": "1641",
+      "name": "Maasgouw"
+    },
+    {
+      "code": "1652",
+      "name": "Gemert-Bakel"
+    },
+    {
+      "code": "1655",
+      "name": "Halderberge"
+    },
+    {
+      "code": "1658",
+      "name": "Heeze-Leende"
+    },
+    {
+      "code": "1659",
+      "name": "Laarbeek"
+    },
+    {
+      "code": "1667",
+      "name": "Reusel-De Mierden"
+    },
+    {
+      "code": "1669",
+      "name": "Roerdalen"
+    },
+    {
+      "code": "1674",
+      "name": "Roosendaal"
+    },
+    {
+      "code": "1676",
+      "name": "Schouwen-Duiveland"
+    },
+    {
+      "code": "1680",
+      "name": "Aa en Hunze"
+    },
+    {
+      "code": "1681",
+      "name": "Borger-Odoorn"
+    },
+    {
+      "code": "1690",
+      "name": "De Wolden"
+    },
+    {
+      "code": "1695",
+      "name": "Noord-Beveland"
+    },
+    {
+      "code": "1696",
+      "name": "Wijdemeren"
+    },
+    {
+      "code": "1699",
+      "name": "Noordenveld"
+    },
+    {
+      "code": "1700",
+      "name": "Twenterand"
+    },
+    {
+      "code": "1701",
+      "name": "Westerveld"
+    },
+    {
+      "code": "1705",
+      "name": "Lingewaard"
+    },
+    {
+      "code": "1706",
+      "name": "Cranendonck"
+    },
+    {
+      "code": "1708",
+      "name": "Steenwijkerland"
+    },
+    {
+      "code": "1709",
+      "name": "Moerdijk"
+    },
+    {
+      "code": "1711",
+      "name": "Echt-Susteren"
+    },
+    {
+      "code": "1714",
+      "name": "Sluis"
+    },
+    {
+      "code": "1719",
+      "name": "Drimmelen"
+    },
+    {
+      "code": "1721",
+      "name": "Bernheze"
+    },
+    {
+      "code": "1723",
+      "name": "Alphen-Chaam"
+    },
+    {
+      "code": "1724",
+      "name": "Bergeijk"
+    },
+    {
+      "code": "1728",
+      "name": "Bladel"
+    },
+    {
+      "code": "1729",
+      "name": "Gulpen-Wittem"
+    },
+    {
+      "code": "1730",
+      "name": "Tynaarlo"
+    },
+    {
+      "code": "1731",
+      "name": "Midden-Drenthe"
+    },
+    {
+      "code": "1734",
+      "name": "Overbetuwe"
+    },
+    {
+      "code": "1735",
+      "name": "Hof van Twente"
+    },
+    {
+      "code": "1740",
+      "name": "Neder-Betuwe"
+    },
+    {
+      "code": "1742",
+      "name": "Rijssen-Holten"
+    },
+    {
+      "code": "1771",
+      "name": "Geldrop-Mierlo"
+    },
+    {
+      "code": "1773",
+      "name": "Olst-Wijhe"
+    },
+    {
+      "code": "1774",
+      "name": "Dinkelland"
+    },
+    {
+      "code": "1783",
+      "name": "Westland"
+    },
+    {
+      "code": "1842",
+      "name": "Midden-Delfland"
+    },
+    {
+      "code": "1859",
+      "name": "Berkelland"
+    },
+    {
+      "code": "1876",
+      "name": "Bronckhorst"
+    },
+    {
+      "code": "1883",
+      "name": "Sittard-Geleen"
+    },
+    {
+      "code": "1884",
+      "name": "Kaag en Braassem"
+    },
+    {
+      "code": "1891",
+      "name": "Dantumadiel"
+    },
+    {
+      "code": "1892",
+      "name": "Zuidplas"
+    },
+    {
+      "code": "1894",
+      "name": "Peel en Maas"
+    },
+    {
+      "code": "1895",
+      "name": "Oldambt"
+    },
+    {
+      "code": "1896",
+      "name": "Zwartewaterland"
+    },
+    {
+      "code": "1900",
+      "name": "Súdwest-Fryslân"
+    },
+    {
+      "code": "1901",
+      "name": "Bodegraven-Reeuwijk"
+    },
+    {
+      "code": "1903",
+      "name": "Eijsden-Margraten"
+    },
+    {
+      "code": "1904",
+      "name": "Stichtse Vecht"
+    },
+    {
+      "code": "1911",
+      "name": "Hollands Kroon"
+    },
+    {
+      "code": "1916",
+      "name": "Leidschendam-Voorburg"
+    },
+    {
+      "code": "1924",
+      "name": "Goeree-Overflakkee"
+    },
+    {
+      "code": "1926",
+      "name": "Pijnacker-Nootdorp"
+    },
+    {
+      "code": "1930",
+      "name": "Nissewaard"
+    },
+    {
+      "code": "1931",
+      "name": "Krimpenerwaard"
+    },
+    {
+      "code": "1940",
+      "name": "De Fryske Marren"
+    },
+    {
+      "code": "1942",
+      "name": "Gooise Meren"
+    },
+    {
+      "code": "1945",
+      "name": "Berg en Dal"
+    },
+    {
+      "code": "1948",
+      "name": "Meierijstad"
+    },
+    {
+      "code": "1949",
+      "name": "Waadhoeke"
+    },
+    {
+      "code": "1950",
+      "name": "Westerwolde"
+    },
+    {
+      "code": "1952",
+      "name": "Midden-Groningen"
+    },
+    {
+      "code": "1954",
+      "name": "Beekdaelen"
+    },
+    {
+      "code": "1955",
+      "name": "Montferland"
+    },
+    {
+      "code": "1959",
+      "name": "Altena"
+    },
+    {
+      "code": "1960",
+      "name": "West Betuwe"
+    },
+    {
+      "code": "1961",
+      "name": "Vijfheerenlanden"
+    },
+    {
+      "code": "1963",
+      "name": "Hoeksche Waard"
+    },
+    {
+      "code": "1966",
+      "name": "Het Hogeland"
+    },
+    {
+      "code": "1969",
+      "name": "Westerkwartier"
+    },
+    {
+      "code": "1970",
+      "name": "Noardeast-Fryslân"
+    },
+    {
+      "code": "1978",
+      "name": "Molenlanden"
+    },
+    {
+      "code": "1979",
+      "name": "Eemsdelta"
+    },
+    {
+      "code": "1980",
+      "name": "Dijk en Waard"
+    },
+    {
+      "code": "1982",
+      "name": "Land van Cuijk"
+    },
+    {
+      "code": "1991",
+      "name": "Maashorst"
+    },
+    {
+      "code": "1992",
+      "name": "Voorne aan Zee"
+    }
+  ]
+}

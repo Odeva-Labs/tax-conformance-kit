@@ -1,0 +1,225 @@
+{
+  "id": "nl-breda-2026",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands"
+  },
+  "assessment_policy": {
+    "minimum_assessment_amount": {
+      "amount": 5.0,
+      "currency": "EUR"
+    },
+    "notes": "TODO: confirm the exact assessment period from the Breda ordinance before making this executable in the assessment evaluator."
+  },
+  "rules": [
+    {
+      "id": "nl-breda-2026-general-ppn",
+      "municipality_code": "0758",
+      "municipality_name": "Breda",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "applies_to": {
+        "accommodation_types": ["hotel", "apartment", "bungalow", "short_stay"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": { "amount": 3.95 },
+        "currency": "EUR"
+      },
+      "exemptions": [
+        { "kind": "stay.wtza_care_institution" },
+        { "kind": "stay.coa_asylum_housing" },
+        {
+          "kind": "stay.supervised_minor_group",
+          "params": {
+            "min_minors": 11,
+            "min_supervisors": 1,
+            "supervisor_min_age": 18,
+            "allowed_purposes": ["school_group", "youth_group"]
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR/breda-verordening-toeristenbelasting-2026",
+        "cvdr_id": "CVDR-TODO",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "scraped"
+    },
+    {
+      "id": "nl-breda-2026-camping-operator-ppn",
+      "municipality_code": "0758",
+      "municipality_name": "Breda",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "applies_to": {
+        "accommodation_types": ["camping"]
+      },
+      "predicates": [
+        { "kind": "stay.accommodation_brought_by", "params": { "value": "operator" } },
+        { "kind": "stay.pricing_arrangement", "params": { "value": "per_night" } }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": { "amount": 1.50 },
+        "currency": "EUR"
+      },
+      "exemptions": [
+        { "kind": "stay.wtza_care_institution" },
+        { "kind": "stay.coa_asylum_housing" },
+        {
+          "kind": "stay.supervised_minor_group",
+          "params": {
+            "min_minors": 11,
+            "min_supervisors": 1,
+            "supervisor_min_age": 18,
+            "allowed_purposes": ["school_group", "youth_group"]
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR/breda-verordening-toeristenbelasting-2026",
+        "cvdr_id": "CVDR-TODO",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "scraped"
+    },
+    {
+      "id": "nl-breda-2026-camping-self-ppn",
+      "municipality_code": "0758",
+      "municipality_name": "Breda",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "applies_to": {
+        "accommodation_types": ["camping"]
+      },
+      "predicates": [
+        { "kind": "stay.accommodation_brought_by", "params": { "value": "guest" } },
+        { "kind": "stay.pricing_arrangement", "params": { "value": "per_night" } }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": { "amount": 0.50 },
+        "currency": "EUR"
+      },
+      "exemptions": [
+        { "kind": "stay.wtza_care_institution" },
+        { "kind": "stay.coa_asylum_housing" },
+        {
+          "kind": "stay.supervised_minor_group",
+          "params": {
+            "min_minors": 11,
+            "min_supervisors": 1,
+            "supervisor_min_age": 18,
+            "allowed_purposes": ["school_group", "youth_group"]
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR/breda-verordening-toeristenbelasting-2026",
+        "cvdr_id": "CVDR-TODO",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "scraped"
+    },
+    {
+      "id": "nl-breda-2026-camping-operator-tiered",
+      "municipality_code": "0758",
+      "municipality_name": "Breda",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "applies_to": {
+        "accommodation_types": ["camping"]
+      },
+      "predicates": [
+        { "kind": "stay.accommodation_brought_by", "params": { "value": "operator" } },
+        { "kind": "stay.pricing_arrangement", "params": { "value": "arrangement" } }
+      ],
+      "calculation": {
+        "kind": "nl.tiered_by_stay_duration",
+        "params": {
+          "tiers": [
+            { "max_nights": 30, "amount": 45.00 },
+            { "min_nights": 30, "max_nights": 120, "amount": 80.00 },
+            { "min_nights": 120, "max_nights": 240, "amount": 120.00 },
+            { "min_nights": 240, "max_nights": 360, "amount": 150.00 }
+          ]
+        },
+        "currency": "EUR"
+      },
+      "exemptions": [
+        { "kind": "stay.wtza_care_institution" },
+        { "kind": "stay.coa_asylum_housing" },
+        {
+          "kind": "stay.supervised_minor_group",
+          "params": {
+            "min_minors": 11,
+            "min_supervisors": 1,
+            "supervisor_min_age": 18,
+            "allowed_purposes": ["school_group", "youth_group"]
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR/breda-verordening-toeristenbelasting-2026",
+        "cvdr_id": "CVDR-TODO",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "scraped",
+      "notes": "Operator-provided camping accommodation priced as an arrangement: 1mo EUR45 / 1-4mo EUR80 / 4-8mo EUR120 / 8-12mo EUR150."
+    },
+    {
+      "id": "nl-breda-2026-camping-self-tiered",
+      "municipality_code": "0758",
+      "municipality_name": "Breda",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31",
+      "applies_to": {
+        "accommodation_types": ["camping"]
+      },
+      "predicates": [
+        { "kind": "stay.accommodation_brought_by", "params": { "value": "guest" } },
+        { "kind": "stay.pricing_arrangement", "params": { "value": "arrangement" } }
+      ],
+      "calculation": {
+        "kind": "nl.tiered_by_stay_duration",
+        "params": {
+          "tiers": [
+            { "max_nights": 30, "amount": 20.00 },
+            { "min_nights": 30, "max_nights": 120, "amount": 40.00 },
+            { "min_nights": 120, "max_nights": 240, "amount": 60.00 },
+            { "min_nights": 240, "max_nights": 360, "amount": 75.00 }
+          ]
+        },
+        "currency": "EUR"
+      },
+      "exemptions": [
+        { "kind": "stay.wtza_care_institution" },
+        { "kind": "stay.coa_asylum_housing" },
+        {
+          "kind": "stay.supervised_minor_group",
+          "params": {
+            "min_minors": 11,
+            "min_supervisors": 1,
+            "supervisor_min_age": 18,
+            "allowed_purposes": ["school_group", "youth_group"]
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR/breda-verordening-toeristenbelasting-2026",
+        "cvdr_id": "CVDR-TODO",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "scraped",
+      "notes": "Guest-brought camping accommodation priced as an arrangement: 1mo EUR20 / 1-4mo EUR40 / 4-8mo EUR60 / 8-12mo EUR75."
+    }
+  ]
+}
