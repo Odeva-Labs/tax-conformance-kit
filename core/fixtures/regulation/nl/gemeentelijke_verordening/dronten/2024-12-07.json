@@ -1,0 +1,76 @@
+{
+  "id": "nl-dronten-2024-12-07",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "period": "calendar_year",
+    "minimum_assessment_amount": {
+      "amount": 5,
+      "currency": "EUR"
+    },
+    "notes": "Assessment period inferred from the belastingtijdvak article. Minimum assessment amount inferred from the aanslaggrens article."
+  },
+  "rules": [
+    {
+      "id": "2024-12-07-rate-1",
+      "municipality_code": "0303",
+      "municipality_name": "Dronten",
+      "region_code": "",
+      "valid_from": "2024-12-07",
+      "valid_to": "2025-12-04",
+      "applies_to": {
+        "accommodation_types": []
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.65
+        },
+        "currency": "EUR"
+      },
+      "predicates": [],
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        },
+        {
+          "kind": "cross_tax.already_subject_to",
+          "params": {
+            "tax": "forensenbelasting"
+          }
+        },
+        {
+          "kind": "cross_tax.already_subject_to",
+          "params": {
+            "tax": "watertoeristenbelasting"
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR728530/1",
+        "cvdr_id": "CVDR728530",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "reviewed_at": null,
+        "reviewer": ""
+      },
+      "confidence": "scraped",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 7"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "nl-camping-non-resident-pays",
+  "description": "Synthetic smoke test: non-resident camping guest pays per person per night tax",
+  "rule_set_path": "../2026-01-01.json",
+  "booking_input": {
+    "stay_date": "2026-06-01",
+    "nights": 3,
+    "adults": 2,
+    "children": 1,
+    "main_guest_municipality_code": "0518",
+    "property_municipality_code": "0363",
+    "accommodation_type": "camping",
+    "subtotal": 420.0
+  },
+  "expected": {
+    "total_tax": 22.5,
+    "matched_rule_ids": ["synthetic-camping-demo-2026"]
+  }
+}

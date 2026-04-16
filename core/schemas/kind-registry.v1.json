@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tax-conformance.dev/schemas/kind-registry.v1.json",
+  "title": "KindRegistry",
+  "description": "Canonical list of calculation.kind and predicate.kind values with their params schemas. Every engine port MUST reject rulesets referencing kinds not present here. Ports MAY implement a subset, but MUST fail loudly on unimplemented-but-registered kinds encountered during evaluation.",
+  "type": "object",
+  "required": ["registry_version", "calculations", "predicates"],
+  "properties": {
+    "registry_version": { "const": "v1" },
+    "calculations": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/KindEntry" }
+    },
+    "predicates": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/KindEntry" }
+    }
+  },
+  "$defs": {
+    "KindEntry": {
+      "type": "object",
+      "required": ["description", "params_schema"],
+      "properties": {
+        "description": { "type": "string" },
+        "since": { "type": "string", "description": "Schema version when introduced" },
+        "params_schema": {
+          "type": "object",
+          "description": "JSON Schema (draft 2020-12) for the kind's params object"
+        },
+        "examples": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      }
+    }
+  },
+
+  "registry_version": "v1",
+  "calculations": {
+    "generic.per_night": {
+      "description": "Flat amount per night.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["amount"],
+        "properties": {
+          "amount": { "type": "number", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "generic.per_person_per_night": {
+      "description": "Flat amount per guest per night. Guests = adults + children unless a predicate narrows the set.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["amount"],
+        "properties": {
+          "amount": { "type": "number", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "generic.fixed_amount": {
+      "description": "Flat amount per booking.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["amount"],
+        "properties": {
+          "amount": { "type": "number", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "generic.percentage_of_base": {
+      "description": "Percentage of a configurable base. IMPORTANT: 'accommodation_fee_exclusive_of_tax' means the taxable base excludes the tourist tax itself (NL ordinances commonly define it this way).",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["rate_pct", "base"],
+        "properties": {
+          "rate_pct": { "type": "number", "minimum": 0 },
+          "base": {
+            "type": "string",
+            "enum": [
+              "accommodation_fee_exclusive_of_tax",
+              "gross_booking_total",
+              "subtotal"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "nl.tiered_by_stay_duration": {
+      "description": "Step function over stay length in nights. Tiers are closed-open on max_nights; final tier may omit max_nights. Each tier's amount is the total for the booking (not per-night).",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["tiers"],
+        "properties": {
+          "tiers": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["amount"],
+              "properties": {
+                "min_nights": { "type": "integer", "minimum": 0 },
+                "max_nights": { "type": "integer", "minimum": 1 },
+                "amount": { "type": "number", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "examples": [
+        {
+          "tiers": [
+            { "max_nights": 30, "amount": 0 },
+            { "min_nights": 30, "max_nights": 120, "amount": 50 },
+            { "min_nights": 120, "max_nights": 240, "amount": 100 },
+            { "min_nights": 240, "amount": 150 }
+          ]
+        }
+      ]
+    },
+    "nl.fixed_per_pitch_per_year": {
+      "description": "Per-pitch annual levy. Requires pitch_count on input. Primarily used with the annual_operator_assessment mode; included here so that per-booking engines can at least validate and reject explicitly.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["amount_per_pitch"],
+        "properties": {
+          "amount_per_pitch": { "type": "number", "minimum": 0 },
+          "season": {
+            "type": "string",
+            "enum": ["full_year", "pre_season", "post_season", "per_month"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "nl.forfait_per_person_per_night": {
+      "description": "Per-person-per-night rate applied to DEEMED inputs (nights and persons derived from ordinance-defined forfaits, e.g. Roerdalen: yearly pitch = 80 nights x 2.4 persons). Concrete forfait table lives in params; engine multiplies rate * deemed_nights * deemed_persons * pitch_count.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["amount", "forfait"],
+        "properties": {
+          "amount": { "type": "number", "minimum": 0 },
+          "forfait": {
+            "type": "object",
+            "required": ["nights", "persons_per_pitch"],
+            "properties": {
+              "nights": { "type": "number", "minimum": 0 },
+              "persons_per_pitch": { "type": "number", "minimum": 0 },
+              "regime": {
+                "type": "string",
+                "enum": ["yearly_pitch", "seasonal_pitch", "bed_rental"]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "predicates": {
+    "guest.resident_of_same_municipality": {
+      "description": "True when main_guest_municipality_code equals property_municipality_code (case-insensitive).",
+      "since": "v1",
+      "params_schema": { "type": "object", "additionalProperties": false }
+    },
+    "guest.age_below": {
+      "description": "True when at least one (or N, if params.count set) guest is younger than max_age on the reference night.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["max_age"],
+        "properties": {
+          "max_age": { "type": "integer", "minimum": 0 },
+          "night_index": {
+            "type": "string",
+            "enum": ["first", "any", "each"],
+            "default": "any",
+            "description": "Which night the age is evaluated against. Roerdalen 'under 2 first night' uses 'first'."
+          },
+          "count": { "type": "integer", "minimum": 1, "default": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stay.purpose_in": {
+      "description": "True when booking_input.stay_purpose is in the allowed list.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["values"],
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["school_group", "youth_group", "leisure", "business", "medical", "asylum", "government_ordered"]
+            },
+            "minItems": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stay.wtza_care_institution": {
+      "description": "Stay is at a Wtza-registered care institution. Short-circuit exemption in all four sampled NL ordinances.",
+      "since": "v1",
+      "params_schema": { "type": "object", "additionalProperties": false }
+    },
+    "stay.coa_asylum_housing": {
+      "description": "Stay is COA asylum-seeker housing.",
+      "since": "v1",
+      "params_schema": { "type": "object", "additionalProperties": false }
+    },
+    "stay.accommodation_brought_by": {
+      "description": "Guest brings their own accommodation vs operator provides (Breda camping vs bungalow distinction).",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["value"],
+        "properties": {
+          "value": { "type": "string", "enum": ["guest", "operator"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stay.pricing_arrangement": {
+      "description": "Operator-elected pricing regime. 'per_night' = charged per person per night; 'arrangement' = tiered flat amount by stay-duration bucket. Breda allows camping operators to elect either. Input must assert the chosen regime.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["value"],
+        "properties": {
+          "value": { "type": "string", "enum": ["per_night", "arrangement"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stay.supervised_minor_group": {
+      "description": "True when the booking is an organized minor group with enough minors and adult supervisors. Breda exempts groups of more than 10 minors accompanied by 18+ supervisors.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["min_minors", "min_supervisors", "supervisor_min_age"],
+        "properties": {
+          "min_minors": { "type": "integer", "minimum": 1 },
+          "min_supervisors": { "type": "integer", "minimum": 1 },
+          "supervisor_min_age": { "type": "integer", "minimum": 0 },
+          "allowed_purposes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["school_group", "youth_group", "leisure", "business", "medical", "asylum", "government_ordered"]
+            },
+            "minItems": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stay.seasonal_window": {
+      "description": "Stay date falls within a recurring month-day window (wraps year). Schouwen-Duiveland seasonal surcharges.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["start_mmdd", "end_mmdd"],
+        "properties": {
+          "start_mmdd": { "type": "string", "pattern": "^\\d{2}-\\d{2}$" },
+          "end_mmdd": { "type": "string", "pattern": "^\\d{2}-\\d{2}$" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pitch.ownership_restriction": {
+      "description": "Schouwen-Duiveland: pitch reserved for owner + household; non-owner guests excluded.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "allowed": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["owner", "owner_household"] }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cross_tax.already_subject_to": {
+      "description": "Booking is already subject to another named tax (Roerdalen: forensenbelasting). Engine does not verify; input must assert it.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["tax"],
+        "properties": {
+          "tax": {
+            "type": "string",
+            "enum": ["forensenbelasting", "watertoeristenbelasting", "vat", "corporate"]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

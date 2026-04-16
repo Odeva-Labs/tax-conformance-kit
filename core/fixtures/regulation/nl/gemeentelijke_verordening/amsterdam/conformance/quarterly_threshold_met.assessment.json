@@ -1,0 +1,43 @@
+{
+  "id": "nl-amsterdam-quarterly-threshold-met",
+  "description": "Amsterdam 2026: a calendar quarter with EUR 30 total booking tax exceeds the EUR 25 minimum assessment amount",
+  "rule_set_path": "../2026-01-01.json",
+  "assessment_input": {
+    "period_start": "2026-04-01",
+    "period_end": "2026-06-30",
+    "bookings": [
+      {
+        "stay_date": "2026-04-10",
+        "nights": 1,
+        "adults": 1,
+        "children": 0,
+        "property_municipality_code": "0363",
+        "accommodation_type": "hotel",
+        "subtotal": 142.86
+      },
+      {
+        "stay_date": "2026-05-15",
+        "nights": 1,
+        "adults": 1,
+        "children": 0,
+        "property_municipality_code": "0363",
+        "accommodation_type": "hotel",
+        "subtotal": 285.71
+      }
+    ]
+  },
+  "expected": {
+    "total_booking_tax": 30.0,
+    "total_assessment_tax": 30.0,
+    "booking_results": [
+      {
+        "total_tax": 10.0,
+        "matched_rule_ids": ["nl-amsterdam-2026-general"]
+      },
+      {
+        "total_tax": 20.0,
+        "matched_rule_ids": ["nl-amsterdam-2026-general"]
+      }
+    ]
+  }
+}

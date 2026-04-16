@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tax-conformance.dev/schemas/rules.schema.json",
+  "title": "TaxRuleSet",
+  "description": "Open-shape ruleset. Calculation and predicate kinds are namespaced strings cross-checked against kind-registry.v1.json at load time.",
+  "type": "object",
+  "required": ["jurisdiction", "rules"],
+  "properties": {
+    "id": { "type": "string" },
+    "domain": {
+      "type": "string",
+      "enum": ["tourist_tax", "vat", "corporate"],
+      "default": "tourist_tax",
+      "description": "Tax domain. Only tourist_tax is implemented; vat/corporate reserved for forward-compat."
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": ["draft", "reviewed", "official"],
+      "description": "Ruleset-level lifecycle. Individual rules still carry per-rule confidence."
+    },
+    "jurisdiction": {
+      "type": "object",
+      "required": ["country_code"],
+      "properties": {
+        "country_code": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "country_name": { "type": "string" },
+        "region_code": { "type": "string", "description": "ISO 3166-2 subdivision (e.g. ES-CT, DE-BY, IT-25)" },
+        "region_name": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "notes": { "type": "string" },
+    "assessment_policy": {
+      "type": "object",
+      "description": "Assessment-level policy applied after booking liabilities are aggregated into the filing/assessment period. Booking-level evaluators must NOT apply this directly.",
+      "properties": {
+        "period": {
+          "type": "string",
+          "enum": ["calendar_month", "calendar_quarter", "calendar_year", "assessment_cycle"]
+        },
+        "minimum_assessment_amount": {
+          "type": "object",
+          "required": ["amount", "currency"],
+          "properties": {
+            "amount": { "type": "number", "minimum": 0 },
+            "currency": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Rule" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "Rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "municipality_code",
+        "valid_from",
+        "calculation",
+        "source",
+        "confidence"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "municipality_code": { "type": "string" },
+        "municipality_name": { "type": "string" },
+        "region_code": { "type": "string" },
+        "valid_from": { "type": "string", "format": "date" },
+        "valid_to": { "type": ["string", "null"], "format": "date" },
+        "applies_to": {
+          "type": "object",
+          "properties": {
+            "accommodation_types": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "calculation": { "$ref": "#/$defs/Calculation" },
+        "predicates": {
+          "type": "array",
+          "description": "Applicability predicates. All must evaluate to true for the rule to apply.",
+          "items": { "$ref": "#/$defs/Predicate" }
+        },
+        "exemptions": {
+          "type": "array",
+          "description": "Negative predicates. If any matches, rule does NOT apply.",
+          "items": { "$ref": "#/$defs/Predicate" }
+        },
+        "source": { "$ref": "#/$defs/Source" },
+        "confidence": {
+          "type": "string",
+          "enum": ["official", "reviewed", "scraped"]
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Calculation": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
+          "description": "Namespaced kind, e.g. 'nl.per_person_per_night' or 'generic.percentage_of_base'. Cross-checked against kind-registry.v1.json at load time."
+        },
+        "params": {
+          "type": "object",
+          "description": "Kind-specific parameters. Shape validated by kind-registry."
+        },
+        "currency": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Predicate": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$"
+        },
+        "params": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "Source": {
+      "type": "object",
+      "required": ["source_url"],
+      "properties": {
+        "source_url": { "type": "string" },
+        "cvdr_id": { "type": "string", "description": "NL-specific: CVDR canonical id for lokaleregelgeving.overheid.nl" },
+        "scraped_at": { "type": ["string", "null"], "format": "date-time" },
+        "reviewed_at": { "type": ["string", "null"], "format": "date-time" },
+        "reviewer": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

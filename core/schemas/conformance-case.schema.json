@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tax-conformance.dev/schemas/conformance-case.schema.json",
+  "title": "ConformanceCase",
+  "type": "object",
+  "required": ["id", "rule_set_path", "booking_input", "expected"],
+  "properties": {
+    "id": { "type": "string" },
+    "description": { "type": "string" },
+    "rule_set_path": { "type": "string" },
+    "booking_input": {
+      "type": "object",
+      "required": [
+        "stay_date",
+        "nights",
+        "adults",
+        "children",
+        "property_municipality_code",
+        "accommodation_type",
+        "subtotal"
+      ],
+      "properties": {
+        "stay_date": { "type": "string", "format": "date" },
+        "nights": { "type": "integer", "minimum": 0 },
+        "adults": { "type": "integer", "minimum": 0 },
+        "children": { "type": "integer", "minimum": 0 },
+        "guests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "age": { "type": "integer", "minimum": 0 },
+              "role": {
+                "type": "string",
+                "enum": ["guest", "supervisor"]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "main_guest_municipality_code": { "type": ["string", "null"] },
+        "property_municipality_code": { "type": "string" },
+        "accommodation_type": { "type": "string" },
+        "subtotal": { "type": "number", "minimum": 0 },
+        "stay_purpose": {
+          "type": "string",
+          "enum": ["school_group", "youth_group", "leisure", "business", "medical", "asylum", "government_ordered"]
+        },
+        "accommodation_brought_by": {
+          "type": "string",
+          "enum": ["guest", "operator"]
+        },
+        "pricing_arrangement": {
+          "type": "string",
+          "enum": ["per_night", "arrangement"]
+        },
+        "wtza_care_institution": { "type": "boolean" },
+        "coa_asylum_housing": { "type": "boolean" },
+        "pitch_count": { "type": "integer", "minimum": 0 },
+        "already_subject_to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["forensenbelasting", "vat", "corporate"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "expected": {
+      "type": "object",
+      "required": ["total_tax", "matched_rule_ids"],
+      "properties": {
+        "total_tax": { "type": "number", "minimum": 0 },
+        "matched_rule_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

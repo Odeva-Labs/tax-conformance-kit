@@ -1,0 +1,140 @@
+{
+  "id": "nl-apeldoorn-2025-12-30",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "minimum_assessment_amount": {
+      "amount": 10,
+      "currency": "EUR"
+    },
+    "notes": "Assessment period inferred from the belastingtijdvak article. Minimum assessment amount inferred from the aanslaggrens article.",
+    "period": "calendar_year"
+  },
+  "rules": [
+    {
+      "applies_to": {
+        "accommodation_types": []
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.68
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "id": "2025-12-30-rate-1",
+      "municipality_code": "0200",
+      "municipality_name": "Apeldoorn",
+      "notes": "Likely default tariff from the opening paragraph; reviewer must exclude specific reduced categories mentioned later in the same article. Evidence articles: 7",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR754177",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR754177/1"
+      },
+      "valid_from": "2025-12-30",
+      "valid_to": null
+    },
+    {
+      "applies_to": {
+        "accommodation_types": [
+          "hotel"
+        ]
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 2.19
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "id": "2025-12-30-rate-2",
+      "municipality_code": "0200",
+      "municipality_name": "Apeldoorn",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 7",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR754177",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR754177/1"
+      },
+      "valid_from": "2025-12-30",
+      "valid_to": null
+    },
+    {
+      "applies_to": {
+        "accommodation_types": [
+          "hotel"
+        ]
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 2.94
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "id": "2025-12-30-rate-3",
+      "municipality_code": "0200",
+      "municipality_name": "Apeldoorn",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 7",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR754177",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR754177/1"
+      },
+      "valid_from": "2025-12-30",
+      "valid_to": null
+    }
+  ]
+}

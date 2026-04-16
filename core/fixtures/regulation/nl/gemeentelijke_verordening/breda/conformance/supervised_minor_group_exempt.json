@@ -1,0 +1,36 @@
+{
+  "id": "nl-breda-supervised-minor-group-exempt",
+  "description": "Breda 2026: organized minor groups larger than 10 minors with adult supervisors are exempt",
+  "rule_set_path": "../2026-01-01.json",
+  "booking_input": {
+    "stay_date": "2026-07-01",
+    "nights": 3,
+    "adults": 2,
+    "children": 11,
+    "property_municipality_code": "0758",
+    "accommodation_type": "camping",
+    "subtotal": 0.0,
+    "stay_purpose": "school_group",
+    "accommodation_brought_by": "guest",
+    "pricing_arrangement": "per_night",
+    "guests": [
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 14, "role": "guest" },
+      { "age": 30, "role": "supervisor" },
+      { "age": 35, "role": "supervisor" }
+    ]
+  },
+  "expected": {
+    "total_tax": 0.0,
+    "matched_rule_ids": []
+  }
+}
