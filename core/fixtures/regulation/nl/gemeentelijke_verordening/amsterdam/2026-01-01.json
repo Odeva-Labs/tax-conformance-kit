@@ -1,0 +1,45 @@
+{
+  "id": "nl-amsterdam-2026",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands"
+  },
+  "assessment_policy": {
+    "period": "calendar_quarter",
+    "minimum_assessment_amount": {
+      "amount": 25.0,
+      "currency": "EUR"
+    },
+    "notes": "Article 6 sets the tax period to a calendar quarter. Article 8 states that assessments below EUR 25 are not imposed."
+  },
+  "rules": [
+    {
+      "id": "nl-amsterdam-2026-general",
+      "municipality_code": "0363",
+      "municipality_name": "Amsterdam",
+      "valid_from": "2026-01-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel", "apartment", "cabin"]
+      },
+      "calculation": {
+        "kind": "generic.percentage_of_base",
+        "params": {
+          "rate_pct": 7.0,
+          "base": "accommodation_fee_exclusive_of_tax"
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR750921",
+        "cvdr_id": "CVDR750921",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "scraped",
+      "notes": "Articles 4-5 set the base to the tax-exclusive accommodation fee and the rate to 7%."
+    }
+  ]
+}

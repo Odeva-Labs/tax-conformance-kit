@@ -1,0 +1,118 @@
+{
+  "id": "nl-tubbergen-2025-12-25",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "minimum_assessment_amount": null,
+    "notes": "Assessment period inferred from the belastingtijdvak article.",
+    "period": "calendar_year"
+  },
+  "rules": [
+    {
+      "applies_to": {
+        "accommodation_types": []
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.5
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        },
+        {
+          "kind": "cross_tax.already_subject_to",
+          "params": {
+            "tax": "forensenbelasting"
+          }
+        }
+      ],
+      "id": "2025-12-25-rate-1",
+      "municipality_code": "0183",
+      "municipality_name": "Tubbergen",
+      "notes": "Likely default tariff from the opening paragraph; reviewer must exclude specific reduced categories mentioned later in the same article. Evidence articles: 8",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR752462",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752462/1"
+      },
+      "valid_from": "2025-12-25",
+      "valid_to": null
+    },
+    {
+      "applies_to": {
+        "accommodation_types": [
+          "group_accommodation",
+          "recreation_home"
+        ]
+      },
+      "calculation": {
+        "currency": "EUR",
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.2
+        }
+      },
+      "confidence": "scraped",
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        },
+        {
+          "kind": "cross_tax.already_subject_to",
+          "params": {
+            "tax": "forensenbelasting"
+          }
+        }
+      ],
+      "id": "2025-12-25-rate-2",
+      "municipality_code": "0183",
+      "municipality_name": "Tubbergen",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 8",
+      "predicates": [],
+      "region_code": "",
+      "source": {
+        "cvdr_id": "CVDR752462",
+        "reviewed_at": null,
+        "reviewer": "",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752462/1"
+      },
+      "valid_from": "2025-12-25",
+      "valid_to": null
+    }
+  ]
+}

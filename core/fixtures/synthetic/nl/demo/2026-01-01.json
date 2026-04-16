@@ -1,0 +1,36 @@
+{
+  "id": "synthetic-nl-demo-2026",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands"
+  },
+  "rules": [
+    {
+      "id": "synthetic-camping-demo-2026",
+      "municipality_code": "0363",
+      "municipality_name": "Amsterdam",
+      "valid_from": "2026-01-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["camping"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": { "amount": 2.50 },
+        "currency": "EUR"
+      },
+      "exemptions": [
+        { "kind": "guest.resident_of_same_municipality" }
+      ],
+      "source": {
+        "source_url": "synthetic://nl/demo/2026-01-01",
+        "scraped_at": null,
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Synthetic smoke-test rule. Not based on a real ordinance."
+    }
+  ]
+}

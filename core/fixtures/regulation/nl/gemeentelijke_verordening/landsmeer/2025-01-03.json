@@ -1,0 +1,72 @@
+{
+  "id": "nl-landsmeer-2025-01-03",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "period": "calendar_year",
+    "minimum_assessment_amount": {
+      "amount": 25,
+      "currency": "EUR"
+    },
+    "notes": "Assessment period inferred from the belastingtijdvak article. Minimum assessment amount inferred from the aanslaggrens article."
+  },
+  "rules": [
+    {
+      "id": "2025-01-03-rate",
+      "municipality_code": "0415",
+      "municipality_name": "Landsmeer",
+      "region_code": "",
+      "valid_from": "2025-01-03",
+      "valid_to": "2025-12-29",
+      "applies_to": {
+        "accommodation_types": null
+      },
+      "calculation": {
+        "kind": "generic.percentage_of_base",
+        "params": {
+          "base": "accommodation_fee_exclusive_of_tax",
+          "rate_pct": 7
+        },
+        "currency": "EUR"
+      },
+      "predicates": [],
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        },
+        {
+          "kind": "guest.age_below",
+          "params": {
+            "max_age": 3,
+            "night_index": "first"
+          }
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR733596/1",
+        "cvdr_id": "CVDR733596",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "reviewed_at": null,
+        "reviewer": ""
+      },
+      "confidence": "scraped",
+      "notes": "Generated from tariff and heffingsmaatstaf articles. Reviewer must confirm exact accommodation scope and municipality code. Evidence articles: 6, 5"
+    }
+  ]
+}

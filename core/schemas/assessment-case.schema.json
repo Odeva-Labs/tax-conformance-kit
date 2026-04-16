@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tax-conformance.dev/schemas/assessment-case.schema.json",
+  "title": "AssessmentCase",
+  "type": "object",
+  "required": ["id", "rule_set_path", "assessment_input", "expected"],
+  "properties": {
+    "id": { "type": "string" },
+    "description": { "type": "string" },
+    "rule_set_path": { "type": "string" },
+    "assessment_input": {
+      "type": "object",
+      "required": ["period_start", "period_end", "bookings"],
+      "properties": {
+        "period_start": { "type": "string", "format": "date" },
+        "period_end": { "type": "string", "format": "date" },
+        "bookings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "conformance-case.schema.json#/properties/booking_input" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "expected": {
+      "type": "object",
+      "required": ["total_booking_tax", "total_assessment_tax", "booking_results"],
+      "properties": {
+        "total_booking_tax": { "type": "number", "minimum": 0 },
+        "total_assessment_tax": { "type": "number", "minimum": 0 },
+        "booking_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["total_tax", "matched_rule_ids"],
+            "properties": {
+              "total_tax": { "type": "number", "minimum": 0 },
+              "matched_rule_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

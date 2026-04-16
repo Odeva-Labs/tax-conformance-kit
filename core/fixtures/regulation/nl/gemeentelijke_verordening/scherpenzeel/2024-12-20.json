@@ -1,0 +1,61 @@
+{
+  "id": "nl-scherpenzeel-2024-12-20",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "NL",
+    "country_name": "Netherlands",
+    "region_code": "",
+    "region_name": ""
+  },
+  "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
+  "assessment_policy": {
+    "period": "calendar_year",
+    "minimum_assessment_amount": null,
+    "notes": "Assessment period inferred from the belastingtijdvak article."
+  },
+  "rules": [
+    {
+      "id": "2024-12-20-rate-1",
+      "municipality_code": "0279",
+      "municipality_name": "Scherpenzeel",
+      "region_code": "",
+      "valid_from": "2024-12-20",
+      "valid_to": "2025-12-31",
+      "applies_to": {
+        "accommodation_types": []
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.92
+        },
+        "currency": "EUR"
+      },
+      "predicates": [],
+      "exemptions": [
+        {
+          "kind": "guest.resident_of_same_municipality",
+          "params": null
+        },
+        {
+          "kind": "stay.wtza_care_institution",
+          "params": null
+        },
+        {
+          "kind": "stay.coa_asylum_housing",
+          "params": null
+        }
+      ],
+      "source": {
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR729951/1",
+        "cvdr_id": "CVDR729951",
+        "scraped_at": "2026-04-17T12:09:56Z",
+        "reviewed_at": null,
+        "reviewer": ""
+      },
+      "confidence": "scraped",
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 5"
+    }
+  ]
+}
