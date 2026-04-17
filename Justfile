@@ -7,6 +7,15 @@ amsterdam_assessment_case := "../../core/fixtures/regulation/nl/gemeentelijke_ve
 default:
   just --list
 
+ci:
+  just vet
+  just test
+  just test-ruby-client
+  just test-ruby-gem
+
+vet:
+  cd {{go_dir}} && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 go vet ./...
+
 test:
   cd {{go_dir}} && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 go test ./...
 
@@ -51,3 +60,10 @@ import-municipality-codes archive:
 
 backfill-municipality-codes:
   cd {{go_dir}} && go run ./cmd/taxctl backfill-municipality-codes
+
+build-gem:
+  cd engines/go && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 GOOS=linux GOARCH=amd64 go build -o ../../clients/ruby/bin/taxctl ./cmd/taxctl
+  mkdir -p clients/ruby/data
+  cp -r core/fixtures/regulation clients/ruby/data/regulation
+  cp core/schemas/kind-registry.v1.json clients/ruby/data/kind-registry.v1.json
+  cd clients/ruby && gem build tax_conformance_kit.gemspec

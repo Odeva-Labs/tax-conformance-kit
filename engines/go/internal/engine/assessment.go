@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 func EvaluateAssessment(input model.AssessmentInput, rs model.RuleSet) (model.AssessmentCaseResult, error) {

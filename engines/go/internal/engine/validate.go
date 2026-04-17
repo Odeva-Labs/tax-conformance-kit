@@ -3,7 +3,7 @@ package engine
 import (
 	"fmt"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 func ValidateRuleSet(rs model.RuleSet, registry model.KindRegistry) error {
