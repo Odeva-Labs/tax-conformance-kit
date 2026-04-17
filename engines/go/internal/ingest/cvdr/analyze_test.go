@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 func TestAnalyzeExtractedBundlesInfersPercentageRuleAndAssessmentPolicy(t *testing.T) {

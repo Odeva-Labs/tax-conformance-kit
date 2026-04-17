@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 type CalculationHandler func(params map[string]any, input model.BookingInput) (float64, error)

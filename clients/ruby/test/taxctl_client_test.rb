@@ -36,6 +36,7 @@ module TaxConformanceKit
       ruleset = read_ruleset("regulation", "nl", "gemeentelijke_verordening", "amsterdam", "2026-01-01.json")
       inline_client = TaxctlClient.new(
         command: ["go", "run", "./cmd/taxctl"],
+        registry_path: nil,
         chdir: go_dir.to_s,
         env: {
           "GOCACHE" => "/tmp/tck-gocache",

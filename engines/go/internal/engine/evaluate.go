@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 func Evaluate(input model.BookingInput, rs model.RuleSet) (model.EvaluationResult, error) {

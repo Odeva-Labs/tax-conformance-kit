@@ -3,8 +3,8 @@ package runtimeapi
 import (
 	"errors"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/engine"
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/engine"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 var errNoRegistry = errors.New("kind registry is required")

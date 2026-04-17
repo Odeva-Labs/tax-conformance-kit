@@ -1,0 +1,61 @@
+name: Publish Ruby Client
+
+on:
+  push:
+    tags:
+      - "ruby-v*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+
+      - name: Verify tag matches gem version
+        working-directory: clients/ruby
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          version="$(ruby -I lib -e 'require "tax_conformance_kit/version"; puts TaxConformanceKit::VERSION')"
+          if [ "${GITHUB_REF_NAME#ruby-v}" != "$version" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match gem version ${version}"
+            exit 1
+          fi
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: engines/go/go.mod
+
+      - name: Setup just
+        uses: extractions/setup-just@v2
+
+      - name: Build gem (compile taxctl + bundle data)
+        run: just build-gem
+
+      - name: Configure RubyGems credentials
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: |
+          mkdir -p ~/.gem
+          cat > ~/.gem/credentials <<EOF
+          ---
+          :rubygems_api_key: ${RUBYGEMS_API_KEY}
+          EOF
+          chmod 0600 ~/.gem/credentials
+
+      - name: Publish gem
+        working-directory: clients/ruby
+        run: |
+          version="$(ruby -I lib -e 'require "tax_conformance_kit/version"; puts TaxConformanceKit::VERSION')"
+          gem push "tax_conformance_kit-${version}.gem"
