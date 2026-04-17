@@ -14,6 +14,8 @@ General interface testing that will test that *talking* to the engine works.
 
 These are fixture-driven legal scanrios, which is defined once and can be ran between other libraries. This way we do not need to write 5 different libraries.
 
+Part of this is a form of fuzzing where we check nice-to-have conditions (e.g. tourist tax will never be negative).
+
 ### 3. Corpus breadth
 
 This is the big scary one. It defined the conditions like how many municipalities, years, clauses, exemptions, overlaps, tiers, seasonal windows are actually encoded. This is also where most of the work is done, and this will be hand-curated on every new update. Ironically, this is less work than having to automating it. Stuff goes wrong, the government isn't perfect. You know how it is.
