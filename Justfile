@@ -8,7 +8,7 @@ default:
   just --list
 
 test:
-  cd {{go_dir}} && go test ./...
+  cd {{go_dir}} && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 go test ./...
 
 test-ruby-client:
   ruby -I clients/ruby/lib -I clients/ruby/test -e 'Dir["clients/ruby/test/*_test.rb"].sort.each { |path| require_relative path }'
