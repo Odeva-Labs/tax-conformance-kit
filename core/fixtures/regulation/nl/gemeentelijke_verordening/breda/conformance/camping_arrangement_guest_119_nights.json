@@ -1,0 +1,20 @@
+{
+  "id": "nl-breda-camping-arrangement-self-tiered-119-nights",
+  "description": "Breda 2026: guest-brought camping arrangement at 119 nights remains in the second tier",
+  "rule_set_path": "../2026-01-01.json",
+  "booking_input": {
+    "stay_date": "2026-07-01",
+    "nights": 119,
+    "adults": 2,
+    "children": 0,
+    "property_municipality_code": "0758",
+    "accommodation_type": "camping",
+    "subtotal": 0.0,
+    "accommodation_brought_by": "guest",
+    "pricing_arrangement": "arrangement"
+  },
+  "expected": {
+    "total_tax": 40.0,
+    "matched_rule_ids": ["nl-breda-2026-camping-self-tiered"]
+  }
+}
