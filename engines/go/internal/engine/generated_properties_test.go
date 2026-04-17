@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ramones/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
 )
 
 func TestGeneratedRuleDateBoundaries(t *testing.T) {

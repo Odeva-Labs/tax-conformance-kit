@@ -5,7 +5,7 @@ module TaxConformanceKit
   class Error < StandardError; end
 
   class TaxctlClient
-    def initialize(command:, registry_path: nil, chdir: nil, env: {})
+    def initialize(command: TaxConformanceKit.taxctl_path, registry_path: TaxConformanceKit.kind_registry_path, chdir: nil, env: {})
       @command = normalize_command(command)
       @registry_path = registry_path
       @chdir = chdir
