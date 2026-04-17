@@ -1,0 +1,19 @@
+{
+  "id": "nl-breda-coa-exempt",
+  "description": "Breda 2026: stays in COA asylum housing are exempt",
+  "rule_set_path": "../2026-01-01.json",
+  "booking_input": {
+    "stay_date": "2026-07-01",
+    "nights": 2,
+    "adults": 1,
+    "children": 0,
+    "property_municipality_code": "0758",
+    "accommodation_type": "hotel",
+    "subtotal": 0.0,
+    "coa_asylum_housing": true
+  },
+  "expected": {
+    "total_tax": 0.0,
+    "matched_rule_ids": []
+  }
+}
