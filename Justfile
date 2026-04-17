@@ -7,6 +7,15 @@ amsterdam_assessment_case := "../../core/fixtures/regulation/nl/gemeentelijke_ve
 default:
   just --list
 
+ci:
+  just vet
+  just test
+  just test-ruby-client
+  just test-ruby-gem
+
+vet:
+  cd {{go_dir}} && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 go vet ./...
+
 test:
   cd {{go_dir}} && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 go test ./...
 
