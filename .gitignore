@@ -1,2 +1,3 @@
 clients/ruby/bin/
 clients/ruby/data/
+clients/ruby/*.gem

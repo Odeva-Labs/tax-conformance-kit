@@ -4,21 +4,38 @@ TCK was built for Odeva Booking to test against the large ruleset of tourist tax
 
 ## Architecture
 
+The project is composed of three layers:
+
+- Spec (scraped from official publications)
+- Engine (basic anomaly + input tests. You will throw your client against this)
+- Client (the client that interacts with our tests. These are (preferably) embedded, rather than over-network.)
+
+### Testing
+
 A library will have a testing framework that is build in three layers:
 
-### 1. Unit tests
+#### 1. Unit tests
 
-General interface testing that will test that *talking* to the engine works.
+General interface testing that will test that _talking_ to the engine works.
 
-### 2. Conformance tests (cross-language)
+#### 2. Conformance tests (cross-language)
 
-These are fixture-driven legal scanrios, which is defined once and can be ran between other libraries. This way we do not need to write 5 different libraries.
+These are fixture-driven legal scenarios, which are defined once and can be ran between other libraries. This way we do not need to write this logic in 5 different languages.
 
-Part of this is a form of fuzzing where we check nice-to-have conditions (e.g. tourist tax will never be negative).
+Part of this is a form of fuzzing where we check nice-to-have conditions (e.g. tourist tax will never be negative, it won't be >$1000 per guest, etc.).
 
-### 3. Corpus breadth
+#### 3. Corpus breadth
 
 This is the big scary one. It defined the conditions like how many municipalities, years, clauses, exemptions, overlaps, tiers, seasonal windows are actually encoded. This is also where most of the work is done, and this will be hand-curated on every new update. Ironically, this is less work than having to automating it. Stuff goes wrong, the government isn't perfect. You know how it is.
+
+## Countries supported
+
+- [x] NL
+- [ ] ES
+- [ ] DE
+- [ ] BE
+- [ ] LU
+- [ ] missing country? add an issue with information!
 
 ## Start
 
