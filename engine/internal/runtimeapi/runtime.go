@@ -3,6 +3,7 @@ package runtimeapi
 import (
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/engine"
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
@@ -151,6 +152,96 @@ func ResolveEvaluate(request model.RuntimeResolveEvaluateRequest, defaultRegistr
 		ResolvedRuleSetID:   resolved.RuleSet.ID,
 		ResolvedRuleSetPath: resolved.Path,
 		Result:              &result,
+	}
+}
+
+func ResolveEvaluateAssessment(request model.RuntimeResolveEvaluateAssessmentRequest, defaultRegistry model.KindRegistry) model.RuntimeResolveEvaluateAssessmentResponse {
+	registry, err := resolveRegistry(request.KindRegistry, defaultRegistry)
+	if err != nil {
+		return model.RuntimeResolveEvaluateAssessmentResponse{
+			APIVersion: model.RuntimeAPIVersion,
+			OK:         false,
+			Error:      &model.RuntimeError{Message: err.Error()},
+		}
+	}
+
+	type assessmentGroup struct {
+		resolved engine.ResolvedRuleSet
+		bookings []model.BookingInput
+	}
+
+	grouped := map[string]*assessmentGroup{}
+	for _, booking := range request.AssessmentInput.Bookings {
+		resolved, err := engine.ResolveRuleSet(booking, engine.ResolveRuleSetRequest{
+			FixtureRoot: request.FixtureRoot,
+			Domain:      request.Domain,
+		})
+		if err != nil {
+			return model.RuntimeResolveEvaluateAssessmentResponse{
+				APIVersion: model.RuntimeAPIVersion,
+				OK:         false,
+				Error:      &model.RuntimeError{Message: err.Error()},
+			}
+		}
+
+		group, ok := grouped[resolved.Path]
+		if !ok {
+			group = &assessmentGroup{resolved: resolved}
+			grouped[resolved.Path] = group
+		}
+		group.bookings = append(group.bookings, booking)
+	}
+
+	paths := make([]string, 0, len(grouped))
+	for path := range grouped {
+		paths = append(paths, path)
+	}
+	slices.Sort(paths)
+
+	results := make([]model.ResolvedAssessmentResult, 0, len(paths))
+	totalBookingTax := 0.0
+	totalAssessmentTax := 0.0
+	for _, path := range paths {
+		group := grouped[path]
+		if err := engine.ValidateRuleSet(group.resolved.RuleSet, registry); err != nil {
+			return model.RuntimeResolveEvaluateAssessmentResponse{
+				APIVersion: model.RuntimeAPIVersion,
+				OK:         false,
+				Error:      &model.RuntimeError{Message: fmt.Sprintf("resolved ruleset %s: %s", group.resolved.Path, err.Error())},
+			}
+		}
+
+		result, err := engine.EvaluateAssessment(model.AssessmentInput{
+			PeriodStart: request.AssessmentInput.PeriodStart,
+			PeriodEnd:   request.AssessmentInput.PeriodEnd,
+			Bookings:    group.bookings,
+		}, group.resolved.RuleSet)
+		if err != nil {
+			return model.RuntimeResolveEvaluateAssessmentResponse{
+				APIVersion: model.RuntimeAPIVersion,
+				OK:         false,
+				Error:      &model.RuntimeError{Message: err.Error()},
+			}
+		}
+
+		results = append(results, model.ResolvedAssessmentResult{
+			ResolvedRuleSetID:   group.resolved.RuleSet.ID,
+			ResolvedRuleSetPath: group.resolved.Path,
+			RuleCount:           len(group.resolved.RuleSet.Rules),
+			BookingCount:        len(group.bookings),
+			Result:              result,
+		})
+		totalBookingTax += result.TotalBookingTax
+		totalAssessmentTax += result.TotalAssessmentTax
+	}
+
+	return model.RuntimeResolveEvaluateAssessmentResponse{
+		APIVersion:          model.RuntimeAPIVersion,
+		OK:                  true,
+		GroupCount:          len(results),
+		TotalBookingTax:     totalBookingTax,
+		TotalAssessmentTax:  totalAssessmentTax,
+		ResolvedAssessments: results,
 	}
 }
 

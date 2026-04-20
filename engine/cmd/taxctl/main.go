@@ -51,6 +51,8 @@ func main() {
 		runtimeEvaluateCmd(os.Args[2:])
 	case "runtime-resolve-evaluate":
 		runtimeResolveEvaluateCmd(os.Args[2:])
+	case "runtime-resolve-evaluate-assessment":
+		runtimeResolveEvaluateAssessmentCmd(os.Args[2:])
 	case "runtime-evaluate-assessment":
 		runtimeEvaluateAssessmentCmd(os.Args[2:])
 	case "validate":
@@ -64,7 +66,7 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: taxctl <discover-cvdr|harvest-cvdr|select-cvdr-candidates|report-cvdr-coverage|import-cbs-municipality-codes|backfill-municipality-codes|extract-cvdr-stubs|analyze-cvdr-stubs|generate-draft-fixtures|evaluate|evaluate-assessment|runtime-validate|runtime-evaluate|runtime-resolve-evaluate|runtime-evaluate-assessment|validate|export> [flags]")
+	fmt.Fprintln(os.Stderr, "usage: taxctl <discover-cvdr|harvest-cvdr|select-cvdr-candidates|report-cvdr-coverage|import-cbs-municipality-codes|backfill-municipality-codes|extract-cvdr-stubs|analyze-cvdr-stubs|generate-draft-fixtures|evaluate|evaluate-assessment|runtime-validate|runtime-evaluate|runtime-resolve-evaluate|runtime-evaluate-assessment|runtime-resolve-evaluate-assessment|validate|export> [flags]")
 }
 
 func evaluateCmd(args []string) {
@@ -189,6 +191,29 @@ func runtimeResolveEvaluateCmd(args []string) {
 	}
 
 	response := runtimeapi.ResolveEvaluate(request, readOptionalRegistry(*registryPath))
+	writeRuntimeResponse(response, response.OK)
+}
+
+func runtimeResolveEvaluateAssessmentCmd(args []string) {
+	fs := flag.NewFlagSet("runtime-resolve-evaluate-assessment", flag.ExitOnError)
+	inputPath := fs.String("input", "-", "path to runtime request json ('-' for stdin)")
+	registryPath := fs.String("registry", "", "path to kind registry json")
+	_ = fs.Parse(args)
+
+	request, err := readJSONInput[model.RuntimeResolveEvaluateAssessmentRequest](*inputPath)
+	if err != nil {
+		writeRuntimeResponse(model.RuntimeResolveEvaluateAssessmentResponse{
+			APIVersion: model.RuntimeAPIVersion,
+			OK:         false,
+			Error:      &model.RuntimeError{Message: err.Error()},
+		}, false)
+		return
+	}
+	if request.FixtureRoot == "" {
+		request.FixtureRoot = findRepoFile("core/fixtures/regulation")
+	}
+
+	response := runtimeapi.ResolveEvaluateAssessment(request, readOptionalRegistry(*registryPath))
 	writeRuntimeResponse(response, response.OK)
 }
 

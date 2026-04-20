@@ -43,6 +43,9 @@ runtime-resolve-evaluate input="-":
 runtime-evaluate-assessment input="-":
   cd {{go_dir}} && go run ./cmd/taxctl runtime-evaluate-assessment -input {{input}}
 
+runtime-resolve-evaluate-assessment input="-":
+  cd {{go_dir}} && go run ./cmd/taxctl runtime-resolve-evaluate-assessment -input {{input}}
+
 harvest output="/tmp/tck-cvdr-index":
   cd {{go_dir}} && go run ./cmd/taxctl harvest-cvdr -output-dir {{output}}
 

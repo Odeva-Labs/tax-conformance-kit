@@ -44,6 +44,15 @@ module TaxConformanceKit
       })
     end
 
+    def evaluate_resolved_assessment(assessment_input:, fixture_root: nil, domain: nil, kind_registry: nil)
+      run_json("runtime-resolve-evaluate-assessment", {
+        fixture_root: fixture_root,
+        domain: domain,
+        assessment_input: assessment_input,
+        kind_registry: kind_registry
+      })
+    end
+
     private
 
     def normalize_command(command)

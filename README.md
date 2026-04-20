@@ -58,9 +58,12 @@ just runtime-validate
 just runtime-evaluate
 just runtime-resolve-evaluate
 just runtime-evaluate-assessment
+just runtime-resolve-evaluate-assessment
 ```
 
 `runtime-resolve-evaluate` resolves the correct regulation fixture from `booking_input.property_location` and `stay_date`, then evaluates against it. This is the preferred entry point for multi-jurisdiction portfolios such as a Dutch operator with Spanish properties.
+
+`runtime-resolve-evaluate-assessment` does the same resolution step for every booking in an assessment period, then returns one grouped filing result per resolved ruleset plus aggregate totals across the portfolio.
 
 ## Draft Fixture Pipeline
 
