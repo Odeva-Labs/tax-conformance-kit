@@ -65,6 +65,19 @@ module TaxConformanceKit
       assert_equal 1, response["result"]["matched_rule_ids"].length
     end
 
+    def test_evaluate_resolved_matches_barcelona_conformance_case
+      conformance = read_json("core", "fixtures", "regulation", "es", "impuesto_estancias_turisticas", "catalonia", "barcelona_city", "conformance", "dutch_operator_barcelona_hotel_5_star.json")
+
+      response = client.evaluate_resolved(
+        booking_input: conformance.fetch("booking_input")
+      )
+
+      assert_equal true, response["ok"]
+      assert_equal conformance.dig("expected", "total_tax"), response.dig("result", "total_tax")
+      assert_equal "es-catalonia-barcelona-city-2026-04-01", response["resolved_ruleset_id"]
+      assert_includes response["resolved_ruleset_path"], "/es/impuesto_estancias_turisticas/catalonia/barcelona_city/"
+    end
+
     def test_evaluate_assessment_matches_amsterdam_conformance_case
       conformance = read_json("core", "fixtures", "regulation", "nl", "gemeentelijke_verordening", "amsterdam", "conformance", "quarterly_threshold_met.assessment.json")
       ruleset = read_ruleset("regulation", "nl", "gemeentelijke_verordening", "amsterdam", "2026-01-01.json")

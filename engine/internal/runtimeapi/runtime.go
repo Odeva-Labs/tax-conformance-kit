@@ -2,6 +2,7 @@ package runtimeapi
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/engine"
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
@@ -101,6 +102,55 @@ func EvaluateAssessment(request model.RuntimeEvaluateAssessmentRequest, defaultR
 		OK:         true,
 		RuleCount:  len(request.RuleSet.Rules),
 		Result:     &result,
+	}
+}
+
+func ResolveEvaluate(request model.RuntimeResolveEvaluateRequest, defaultRegistry model.KindRegistry) model.RuntimeResolveEvaluateResponse {
+	registry, err := resolveRegistry(request.KindRegistry, defaultRegistry)
+	if err != nil {
+		return model.RuntimeResolveEvaluateResponse{
+			APIVersion: model.RuntimeAPIVersion,
+			OK:         false,
+			Error:      &model.RuntimeError{Message: err.Error()},
+		}
+	}
+
+	resolved, err := engine.ResolveRuleSet(request.BookingInput, engine.ResolveRuleSetRequest{
+		FixtureRoot: request.FixtureRoot,
+		Domain:      request.Domain,
+	})
+	if err != nil {
+		return model.RuntimeResolveEvaluateResponse{
+			APIVersion: model.RuntimeAPIVersion,
+			OK:         false,
+			Error:      &model.RuntimeError{Message: err.Error()},
+		}
+	}
+
+	if err := engine.ValidateRuleSet(resolved.RuleSet, registry); err != nil {
+		return model.RuntimeResolveEvaluateResponse{
+			APIVersion: model.RuntimeAPIVersion,
+			OK:         false,
+			Error:      &model.RuntimeError{Message: fmt.Sprintf("resolved ruleset %s: %s", resolved.Path, err.Error())},
+		}
+	}
+
+	result, err := engine.Evaluate(request.BookingInput, resolved.RuleSet)
+	if err != nil {
+		return model.RuntimeResolveEvaluateResponse{
+			APIVersion: model.RuntimeAPIVersion,
+			OK:         false,
+			Error:      &model.RuntimeError{Message: err.Error()},
+		}
+	}
+
+	return model.RuntimeResolveEvaluateResponse{
+		APIVersion:          model.RuntimeAPIVersion,
+		OK:                  true,
+		RuleCount:           len(resolved.RuleSet.Rules),
+		ResolvedRuleSetID:   resolved.RuleSet.ID,
+		ResolvedRuleSetPath: resolved.Path,
+		Result:              &result,
 	}
 }
 

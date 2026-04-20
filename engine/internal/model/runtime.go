@@ -19,6 +19,13 @@ type RuntimeEvaluateAssessmentRequest struct {
 	KindRegistry    *KindRegistry   `json:"kind_registry,omitempty"`
 }
 
+type RuntimeResolveEvaluateRequest struct {
+	FixtureRoot  string        `json:"fixture_root,omitempty"`
+	Domain       string        `json:"domain,omitempty"`
+	BookingInput BookingInput  `json:"booking_input"`
+	KindRegistry *KindRegistry `json:"kind_registry,omitempty"`
+}
+
 type RuntimeError struct {
 	Message string `json:"message"`
 }
@@ -36,6 +43,16 @@ type RuntimeEvaluateResponse struct {
 	RuleCount  int               `json:"rule_count,omitempty"`
 	Result     *EvaluationResult `json:"result,omitempty"`
 	Error      *RuntimeError     `json:"error,omitempty"`
+}
+
+type RuntimeResolveEvaluateResponse struct {
+	APIVersion          string            `json:"api_version"`
+	OK                  bool              `json:"ok"`
+	RuleCount           int               `json:"rule_count,omitempty"`
+	ResolvedRuleSetID   string            `json:"resolved_ruleset_id,omitempty"`
+	ResolvedRuleSetPath string            `json:"resolved_ruleset_path,omitempty"`
+	Result              *EvaluationResult `json:"result,omitempty"`
+	Error               *RuntimeError     `json:"error,omitempty"`
 }
 
 type RuntimeEvaluateAssessmentResponse struct {

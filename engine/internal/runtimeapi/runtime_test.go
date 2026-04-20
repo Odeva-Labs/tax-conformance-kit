@@ -1,6 +1,7 @@
 package runtimeapi
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
@@ -127,6 +128,42 @@ func TestEvaluateReturnsStructuredResult(t *testing.T) {
 	}
 	if response.Result.TotalTax != 0 {
 		t.Fatalf("expected exempt stay to produce zero tax, got %v", response.Result.TotalTax)
+	}
+}
+
+func TestResolveEvaluateReturnsResolvedRuleSet(t *testing.T) {
+	repoRoot := findRepoRoot(t)
+	registry := readKindRegistry(t, filepath.Join(repoRoot, "core", "schemas", "kind-registry.v1.json"))
+
+	response := ResolveEvaluate(model.RuntimeResolveEvaluateRequest{
+		FixtureRoot: filepath.Join(repoRoot, "core", "fixtures", "regulation"),
+		BookingInput: model.BookingInput{
+			StayDate: "2026-06-15",
+			Nights:   10,
+			Guests: []model.Guest{
+				{Age: intPtr(34), Role: "guest"},
+				{Age: intPtr(38), Role: "guest"},
+				{Age: intPtr(15), Role: "guest"},
+			},
+			PropertyLocation: &model.Location{
+				CountryCode:  "ES",
+				RegionCode:   "ES-CT",
+				LocalityKind: "municipality",
+				LocalityCode: "08019",
+				LocalityName: "Barcelona",
+			},
+			AccommodationType: "hotel_5_star",
+		},
+	}, registry)
+
+	if !response.OK {
+		t.Fatalf("expected resolution to pass, got %+v", response)
+	}
+	if response.Result == nil || response.Result.TotalTax != 168 {
+		t.Fatalf("expected resolved evaluation tax 168, got %+v", response.Result)
+	}
+	if response.ResolvedRuleSetID != "es-catalonia-barcelona-city-2026-04-01" {
+		t.Fatalf("unexpected resolved ruleset id %q", response.ResolvedRuleSetID)
 	}
 }
 

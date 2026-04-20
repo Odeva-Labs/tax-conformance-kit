@@ -56,8 +56,11 @@ just evaluate-assessment
 ```bash
 just runtime-validate
 just runtime-evaluate
+just runtime-resolve-evaluate
 just runtime-evaluate-assessment
 ```
+
+`runtime-resolve-evaluate` resolves the correct regulation fixture from `booking_input.property_location` and `stay_date`, then evaluates against it. This is the preferred entry point for multi-jurisdiction portfolios such as a Dutch operator with Spanish properties.
 
 ## Draft Fixture Pipeline
 

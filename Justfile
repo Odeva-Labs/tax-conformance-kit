@@ -37,6 +37,9 @@ runtime-validate input="-":
 runtime-evaluate input="-":
   cd {{go_dir}} && go run ./cmd/taxctl runtime-evaluate -input {{input}}
 
+runtime-resolve-evaluate input="-":
+  cd {{go_dir}} && go run ./cmd/taxctl runtime-resolve-evaluate -input {{input}}
+
 runtime-evaluate-assessment input="-":
   cd {{go_dir}} && go run ./cmd/taxctl runtime-evaluate-assessment -input {{input}}
 
