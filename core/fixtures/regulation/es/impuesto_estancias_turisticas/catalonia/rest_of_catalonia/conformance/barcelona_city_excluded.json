@@ -1,0 +1,24 @@
+{
+  "id": "es-catalonia-rest-barcelona-city-excluded",
+  "description": "The rest-of-Catalonia ruleset excludes Barcelona city's locality code.",
+  "rule_set_path": "../2026-04-01.json",
+  "booking_input": {
+    "stay_date": "2026-07-20",
+    "nights": 2,
+    "adults": 2,
+    "children": 0,
+    "property_location": {
+      "country_code": "ES",
+      "region_code": "ES-CT",
+      "locality_kind": "municipality",
+      "locality_code": "08019",
+      "locality_name": "Barcelona"
+    },
+    "accommodation_type": "hotel_4_star",
+    "subtotal": 500
+  },
+  "expected": {
+    "total_tax": 0,
+    "matched_rule_ids": []
+  }
+}

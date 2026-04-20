@@ -1,0 +1,168 @@
+{
+  "id": "es-catalonia-barcelona-city-2026-04-01",
+  "domain": "tourist_tax",
+  "lifecycle": "reviewed",
+  "jurisdiction": {
+    "country_code": "ES",
+    "country_name": "Spain",
+    "region_code": "ES-CT",
+    "region_name": "Catalonia"
+  },
+  "assessment_policy": {
+    "period": "calendar_half_year",
+    "notes": "Catalonia files the IEET twice per year: 1-20 April for stays accrued from October through March, and 1-20 October for stays accrued from April through September."
+  },
+  "notes": "Reviewed fixture based on the Catalonia Tax Agency's official IEET quota table effective April 1, 2026. Rates below include Barcelona city's municipal surcharge where applicable. Minors under 17 are exempt and the tax is capped at seven stay units per person.",
+  "rules": [
+    {
+      "id": "es-ct-bcn-city-2026-hotel-5-star",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT",
+        "locality_kind": "municipality",
+        "locality_code": "08019",
+        "locality_name": "Barcelona"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel_5_star", "luxury_hotel", "cruise"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 12.0,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Barcelona city rate from April 1, 2026: EUR 12.00 for 5-star and luxury hotels, campings de lujo, and cruises."
+    },
+    {
+      "id": "es-ct-bcn-city-2026-hotel-4-star",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT",
+        "locality_kind": "municipality",
+        "locality_code": "08019",
+        "locality_name": "Barcelona"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel_4_star", "superior_hotel"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 8.0,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Barcelona city rate from April 1, 2026: EUR 8.00 for 4-star and 4-star superior hotels."
+    },
+    {
+      "id": "es-ct-bcn-city-2026-tourist-home",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT",
+        "locality_kind": "municipality",
+        "locality_code": "08019",
+        "locality_name": "Barcelona"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["tourist_apartment", "tourist_home", "private_room"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 9.5,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Barcelona city rate from April 1, 2026: EUR 9.50 for tourist-use homes, tourist apartments, and private-room establishments."
+    },
+    {
+      "id": "es-ct-bcn-city-2026-hostel",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT",
+        "locality_kind": "municipality",
+        "locality_code": "08019",
+        "locality_name": "Barcelona"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hostel", "guesthouse", "boarding_house", "rural_lodging"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 6.0,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Barcelona city rate from April 1, 2026: EUR 6.00 for hostels, pensions, guesthouses, rural tourism, and similar categories."
+    },
+    {
+      "id": "es-ct-bcn-city-2026-camping",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT",
+        "locality_kind": "municipality",
+        "locality_code": "08019",
+        "locality_name": "Barcelona"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["camping", "camping_luxury"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 7.0,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Barcelona city rate from April 1, 2026: EUR 7.00 for campsites and campings de lujo."
+    }
+  ]
+}

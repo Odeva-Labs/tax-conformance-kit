@@ -1,0 +1,28 @@
+{
+  "id": "es-catalonia-barcelona-city-tourist-home-age-17-taxed",
+  "description": "Barcelona city tourist-home stays tax 17-year-olds because only minors under 17 are exempt.",
+  "rule_set_path": "../2026-04-01.json",
+  "booking_input": {
+    "stay_date": "2026-09-10",
+    "nights": 3,
+    "adults": 1,
+    "children": 1,
+    "guests": [
+      { "age": 41, "role": "guest" },
+      { "age": 17, "role": "guest" }
+    ],
+    "property_location": {
+      "country_code": "ES",
+      "region_code": "ES-CT",
+      "locality_kind": "municipality",
+      "locality_code": "08019",
+      "locality_name": "Barcelona"
+    },
+    "accommodation_type": "tourist_home",
+    "subtotal": 900
+  },
+  "expected": {
+    "total_tax": 57.0,
+    "matched_rule_ids": ["es-ct-bcn-city-2026-tourist-home"]
+  }
+}

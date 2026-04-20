@@ -1,0 +1,33 @@
+{
+  "id": "es-catalonia-barcelona-city-dutch-operator-hotel-5-star",
+  "description": "A Dutch operator with a Barcelona 5-star hotel is charged the Barcelona city IEET rate, capped at 7 nights and excluding the 15-year-old guest.",
+  "rule_set_path": "../2026-04-01.json",
+  "booking_input": {
+    "stay_date": "2026-06-15",
+    "nights": 10,
+    "adults": 2,
+    "children": 1,
+    "guests": [
+      { "age": 34, "role": "guest" },
+      { "age": 38, "role": "guest" },
+      { "age": 15, "role": "guest" }
+    ],
+    "property_location": {
+      "country_code": "ES",
+      "region_code": "ES-CT",
+      "locality_kind": "municipality",
+      "locality_code": "08019",
+      "locality_name": "Barcelona"
+    },
+    "operator": {
+      "legal_country_code": "NL",
+      "legal_name": "Canal Stays BV"
+    },
+    "accommodation_type": "hotel_5_star",
+    "subtotal": 4000
+  },
+  "expected": {
+    "total_tax": 168.0,
+    "matched_rule_ids": ["es-ct-bcn-city-2026-hotel-5-star"]
+  }
+}

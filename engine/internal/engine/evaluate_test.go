@@ -316,6 +316,63 @@ func TestEvaluateMatchesGenericLocationScopeForCrossBorderOperator(t *testing.T)
 	}
 }
 
+func TestEvaluatePerPersonPerNightDiscountAfterNights(t *testing.T) {
+	rs := model.RuleSet{
+		Jurisdiction: model.Jurisdiction{
+			CountryCode: "ES",
+			RegionCode:  "ES-IB",
+		},
+		Rules: []model.Rule{
+			{
+				ID: "es-ib-hotel-4-star",
+				LocationScope: &model.Location{
+					CountryCode: "ES",
+					RegionCode:  "ES-IB",
+				},
+				ValidFrom: "2025-05-17",
+				AppliesTo: model.AppliesTo{AccommodationTypes: []string{"hotel_4_star"}},
+				Calculation: model.Calculation{
+					Kind: "generic.per_person_per_night_discount_after_nights",
+					Params: map[string]any{
+						"amount":                3.0,
+						"discount_start_night":  9.0,
+						"discount_multiplier":   0.5,
+						"taxable_guest_age_gte": 16.0,
+					},
+				},
+			},
+		},
+	}
+
+	input := model.BookingInput{
+		StayDate: "2026-07-10",
+		Nights:   10,
+		Adults:   2,
+		Children: 1,
+		Guests: []model.Guest{
+			{Age: intPtr(40), Role: "guest"},
+			{Age: intPtr(34), Role: "guest"},
+			{Age: intPtr(14), Role: "guest"},
+		},
+		PropertyLocation: &model.Location{
+			CountryCode: "ES",
+			RegionCode:  "ES-IB",
+		},
+		AccommodationType: "hotel_4_star",
+	}
+
+	got, err := Evaluate(input, rs)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got.TotalTax != 54 {
+		t.Fatalf("expected 54 tax, got %v", got.TotalTax)
+	}
+	if len(got.MatchedRuleIDs) != 1 || got.MatchedRuleIDs[0] != "es-ib-hotel-4-star" {
+		t.Fatalf("unexpected matched rules: %+v", got.MatchedRuleIDs)
+	}
+}
+
 func TestEvaluateLegacyMunicipalityRuleMatchesGenericPropertyLocation(t *testing.T) {
 	rs := model.RuleSet{
 		Jurisdiction: model.Jurisdiction{CountryCode: "NL"},

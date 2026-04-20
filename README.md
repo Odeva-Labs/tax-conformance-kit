@@ -31,11 +31,13 @@ This is the big scary one. It defined the conditions like how many municipalitie
 ## Countries supported
 
 - [x] NL
-- [ ] ES
+- [x] ES (initial Catalonia + Balearic fixtures)
 - [ ] DE
 - [ ] BE
 - [ ] LU
 - [ ] missing country? add an issue with information!
+
+For age-based regimes, conformance cases should include `booking_input.guests` with ages. Adult/child counts alone are not precise enough for rules like Catalonia's under-17 exemption or the Balearic under-16 exemption.
 
 ## Start
 

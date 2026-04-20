@@ -1,0 +1,166 @@
+{
+  "id": "es-balearic-islands-2025-05-17",
+  "domain": "tourist_tax",
+  "lifecycle": "reviewed",
+  "jurisdiction": {
+    "country_code": "ES",
+    "country_name": "Spain",
+    "region_code": "ES-IB",
+    "region_name": "Illes Balears"
+  },
+  "assessment_policy": {
+    "period": "calendar_quarter",
+    "notes": "ATIB files the Balearic tourist-stay tax by quarter using model 700."
+  },
+  "notes": "Reviewed fixture based on the consolidated Balearic tourist-stay tax law and ATIB guidance. Guests under 16 are exempt. A 75% seasonal reduction applies from 1 November through 30 April, and from the ninth day onward the quota is reduced by 50%.",
+  "rules": [
+    {
+      "id": "es-ib-2025-hotel-4-star-high-season",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-IB"
+      },
+      "valid_from": "2025-05-17",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel_4_star", "superior_hotel"]
+      },
+      "predicates": [
+        {
+          "kind": "stay.seasonal_window",
+          "params": {
+            "start_mmdd": "05-01",
+            "end_mmdd": "10-31"
+          }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night_discount_after_nights",
+        "params": {
+          "amount": 3.0,
+          "discount_start_night": 9,
+          "discount_multiplier": 0.5,
+          "taxable_guest_age_gte": 16
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://www.boe.es/buscar/act.php?id=BOE-A-2016-4175",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Balearic Islands high-season rate: EUR 3.00 for 4-star hotels and 3-star superior hotels. The law reduces the quota by 50% from the ninth day onward."
+    },
+    {
+      "id": "es-ib-2025-hotel-4-star-low-season",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-IB"
+      },
+      "valid_from": "2025-05-17",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel_4_star", "superior_hotel"]
+      },
+      "predicates": [
+        {
+          "kind": "stay.seasonal_window",
+          "params": {
+            "start_mmdd": "11-01",
+            "end_mmdd": "04-30"
+          }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night_discount_after_nights",
+        "params": {
+          "amount": 0.75,
+          "discount_start_night": 9,
+          "discount_multiplier": 0.5,
+          "taxable_guest_age_gte": 16
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://www.boe.es/buscar/act.php?id=BOE-A-2016-4175",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Low season applies a 75% reduction to the EUR 3.00 high-season rate, yielding EUR 0.75 before the ninth-day discount."
+    },
+    {
+      "id": "es-ib-2025-tourist-home-high-season",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-IB"
+      },
+      "valid_from": "2025-05-17",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["tourist_home", "tourist_apartment", "vacation_rental"]
+      },
+      "predicates": [
+        {
+          "kind": "stay.seasonal_window",
+          "params": {
+            "start_mmdd": "05-01",
+            "end_mmdd": "10-31"
+          }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night_discount_after_nights",
+        "params": {
+          "amount": 2.0,
+          "discount_start_night": 9,
+          "discount_multiplier": 0.5,
+          "taxable_guest_age_gte": 16
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://www.boe.es/buscar/act.php?id=BOE-A-2016-4175",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Balearic Islands high-season rate: EUR 2.00 for tourist homes, holiday rentals, and tourist apartments."
+    },
+    {
+      "id": "es-ib-2025-tourist-home-low-season",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-IB"
+      },
+      "valid_from": "2025-05-17",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["tourist_home", "tourist_apartment", "vacation_rental"]
+      },
+      "predicates": [
+        {
+          "kind": "stay.seasonal_window",
+          "params": {
+            "start_mmdd": "11-01",
+            "end_mmdd": "04-30"
+          }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night_discount_after_nights",
+        "params": {
+          "amount": 0.5,
+          "discount_start_night": 9,
+          "discount_multiplier": 0.5,
+          "taxable_guest_age_gte": 16
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://www.boe.es/buscar/act.php?id=BOE-A-2016-4175",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Low season applies a 75% reduction to the EUR 2.00 high-season rate, yielding EUR 0.50 before the ninth-day discount."
+    }
+  ]
+}

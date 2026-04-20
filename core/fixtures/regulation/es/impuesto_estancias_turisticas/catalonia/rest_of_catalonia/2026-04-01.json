@@ -1,0 +1,183 @@
+{
+  "id": "es-catalonia-rest-of-catalonia-2026-04-01",
+  "domain": "tourist_tax",
+  "lifecycle": "reviewed",
+  "jurisdiction": {
+    "country_code": "ES",
+    "country_name": "Spain",
+    "region_code": "ES-CT",
+    "region_name": "Catalonia"
+  },
+  "assessment_policy": {
+    "period": "calendar_half_year",
+    "notes": "Catalonia files the IEET twice per year: 1-20 April for stays accrued from October through March, and 1-20 October for stays accrued from April through September."
+  },
+  "notes": "Reviewed fixture based on the Catalonia Tax Agency's official IEET quota table effective April 1, 2026 for the rest of Catalonia. Barcelona city is excluded explicitly through locality-code predicates. Minors under 17 are exempt and the tax is capped at seven stay units per person.",
+  "rules": [
+    {
+      "id": "es-ct-rest-2026-hotel-5-star",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel_5_star", "luxury_hotel", "cruise"]
+      },
+      "predicates": [
+        {
+          "kind": "location.property_locality_code_not_in",
+          "params": { "values": ["08019"] }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 4.5,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Rest of Catalonia rate from April 1, 2026: EUR 4.50 for 5-star and luxury hotels, campings de lujo, and cruises."
+    },
+    {
+      "id": "es-ct-rest-2026-hotel-4-star",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel_4_star", "superior_hotel"]
+      },
+      "predicates": [
+        {
+          "kind": "location.property_locality_code_not_in",
+          "params": { "values": ["08019"] }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.8,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Rest of Catalonia rate from April 1, 2026: EUR 1.80 for 4-star and 4-star superior hotels."
+    },
+    {
+      "id": "es-ct-rest-2026-tourist-home",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["tourist_apartment", "tourist_home", "private_room"]
+      },
+      "predicates": [
+        {
+          "kind": "location.property_locality_code_not_in",
+          "params": { "values": ["08019"] }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 1.75,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Rest of Catalonia rate from April 1, 2026: EUR 1.75 for tourist-use homes, tourist apartments, and private-room establishments."
+    },
+    {
+      "id": "es-ct-rest-2026-hostel",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hostel", "guesthouse", "boarding_house", "rural_lodging"]
+      },
+      "predicates": [
+        {
+          "kind": "location.property_locality_code_not_in",
+          "params": { "values": ["08019"] }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 0.8,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Rest of Catalonia rate from April 1, 2026: EUR 0.80 for hostels, pensions, guesthouses, rural tourism, and similar categories."
+    },
+    {
+      "id": "es-ct-rest-2026-camping",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["camping", "camping_luxury"]
+      },
+      "predicates": [
+        {
+          "kind": "location.property_locality_code_not_in",
+          "params": { "values": ["08019"] }
+        }
+      ],
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 0.9,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/quota-tributaria",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Rest of Catalonia rate from April 1, 2026: EUR 0.90 for campsites and campings de lujo."
+    }
+  ]
+}

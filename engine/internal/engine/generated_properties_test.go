@@ -493,6 +493,34 @@ func satisfyPredicate(input *model.BookingInput, predicate model.Predicate, targ
 		} else {
 			input.AlreadySubjectTo = []string{}
 		}
+	case "location.property_locality_code_not_in":
+		values, err := getStringSlice(params, "values")
+		if err != nil {
+			return err
+		}
+		location := input.EffectivePropertyLocation()
+		if target {
+			code := "9999"
+			for containsTestString(values, code) {
+				code += "_x"
+			}
+			input.PropertyMunicipalityCode = code
+			input.PropertyLocation = &model.Location{
+				CountryCode:  location.CountryCode,
+				RegionCode:   location.RegionCode,
+				LocalityKind: location.LocalityKind,
+				LocalityCode: code,
+			}
+		} else {
+			code := values[0]
+			input.PropertyMunicipalityCode = code
+			input.PropertyLocation = &model.Location{
+				CountryCode:  location.CountryCode,
+				RegionCode:   location.RegionCode,
+				LocalityKind: location.LocalityKind,
+				LocalityCode: code,
+			}
+		}
 	case "stay.seasonal_window":
 		return fmt.Errorf("seasonal window predicates are not supported in generated properties")
 	default:

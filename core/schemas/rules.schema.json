@@ -36,7 +36,7 @@
       "properties": {
         "period": {
           "type": "string",
-          "enum": ["calendar_month", "calendar_quarter", "calendar_year", "assessment_cycle"]
+          "enum": ["calendar_month", "calendar_quarter", "calendar_half_year", "calendar_year", "assessment_cycle"]
         },
         "minimum_assessment_amount": {
           "type": "object",

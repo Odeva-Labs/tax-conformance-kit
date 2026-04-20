@@ -1,0 +1,27 @@
+{
+  "id": "es-balearic-tourist-home-low-season",
+  "description": "Balearic low-season tourist-home stays apply the 75% seasonal reduction to the base per-person nightly rate.",
+  "rule_set_path": "../2025-05-17.json",
+  "booking_input": {
+    "stay_date": "2026-11-15",
+    "nights": 3,
+    "adults": 2,
+    "children": 0,
+    "guests": [
+      { "age": 31, "role": "guest" },
+      { "age": 29, "role": "guest" }
+    ],
+    "property_location": {
+      "country_code": "ES",
+      "region_code": "ES-IB",
+      "locality_kind": "municipality",
+      "locality_name": "Sant Antoni de Portmany"
+    },
+    "accommodation_type": "tourist_home",
+    "subtotal": 700
+  },
+  "expected": {
+    "total_tax": 3.0,
+    "matched_rule_ids": ["es-ib-2025-tourist-home-low-season"]
+  }
+}

@@ -63,6 +63,22 @@
         "additionalProperties": false
       }
     },
+    "generic.per_person_per_night_discount_after_nights": {
+      "description": "Flat amount per taxable guest per night, with a discounted tail from a configurable night onward. Useful for regimes such as the Balearic Islands where nights 9+ are charged at 50%.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["amount", "discount_start_night", "discount_multiplier"],
+        "properties": {
+          "amount": { "type": "number", "minimum": 0 },
+          "discount_start_night": { "type": "integer", "minimum": 1 },
+          "discount_multiplier": { "type": "number", "minimum": 0 },
+          "max_nights": { "type": "integer", "minimum": 0 },
+          "taxable_guest_age_gte": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
     "generic.fixed_amount": {
       "description": "Flat amount per booking.",
       "since": "v1",
@@ -309,6 +325,22 @@
           "tax": {
             "type": "string",
             "enum": ["forensenbelasting", "watertoeristenbelasting", "vat", "corporate"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "location.property_locality_code_not_in": {
+      "description": "True when the property's locality code is not in the configured list. Useful for region-wide rules that exclude one municipality, such as Catalonia tariffs outside Barcelona city.",
+      "since": "v1",
+      "params_schema": {
+        "type": "object",
+        "required": ["values"],
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
           }
         },
         "additionalProperties": false

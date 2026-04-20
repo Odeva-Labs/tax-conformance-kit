@@ -38,6 +38,37 @@ func init() {
 		return amount * float64(taxableGuests) * float64(cappedNights(params, input.Nights)), nil
 	})
 
+	RegisterCalculation("generic.per_person_per_night_discount_after_nights", func(params map[string]any, input model.BookingInput) (float64, error) {
+		amount, err := getFloat(params, "amount")
+		if err != nil {
+			return 0, err
+		}
+		discountStartNight, err := getInt(params, "discount_start_night")
+		if err != nil {
+			return 0, err
+		}
+		if discountStartNight < 1 {
+			return 0, fmt.Errorf("discount_start_night must be >= 1")
+		}
+		discountMultiplier, err := getFloat(params, "discount_multiplier")
+		if err != nil {
+			return 0, err
+		}
+
+		taxableGuests, err := taxableGuestCount(params, input)
+		if err != nil {
+			return 0, err
+		}
+
+		nights := cappedNights(params, input.Nights)
+		fullRateNights := min(nights, discountStartNight-1)
+		discountedNights := max(nights-fullRateNights, 0)
+
+		fullPortion := amount * float64(fullRateNights)
+		discountedPortion := amount * discountMultiplier * float64(discountedNights)
+		return float64(taxableGuests) * (fullPortion + discountedPortion), nil
+	})
+
 	RegisterCalculation("generic.fixed_amount", func(params map[string]any, input model.BookingInput) (float64, error) {
 		return getFloat(params, "amount")
 	})
@@ -216,6 +247,18 @@ func init() {
 			return false, err
 		}
 		return slices.Contains(input.AlreadySubjectTo, tax), nil
+	})
+
+	RegisterPredicate("location.property_locality_code_not_in", func(params map[string]any, input model.BookingInput) (bool, error) {
+		values, err := getStringSlice(params, "values")
+		if err != nil {
+			return false, err
+		}
+		code := input.EffectivePropertyLocation().LocalityCode
+		if code == "" {
+			return false, nil
+		}
+		return !slices.Contains(values, code), nil
 	})
 }
 
