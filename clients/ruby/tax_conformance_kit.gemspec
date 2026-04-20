@@ -16,7 +16,8 @@ Gem::Specification.new do |spec|
     "lib/**/*.rb",
     "bin/taxctl",
     "data/**/*.json",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ]
   spec.require_paths = ["lib"]
 
