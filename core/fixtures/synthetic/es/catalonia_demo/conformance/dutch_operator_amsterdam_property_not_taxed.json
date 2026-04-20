@@ -1,0 +1,28 @@
+{
+  "id": "es-catalonia-demo-dutch-operator-amsterdam-property-not-taxed",
+  "description": "The same Dutch operator is not taxed by the Catalonia ruleset when the property is in Amsterdam.",
+  "rule_set_path": "../2026-04-01.json",
+  "booking_input": {
+    "stay_date": "2026-06-15",
+    "nights": 3,
+    "adults": 2,
+    "children": 0,
+    "property_location": {
+      "country_code": "NL",
+      "region_code": "NL-NH",
+      "locality_kind": "municipality",
+      "locality_code": "0363",
+      "locality_name": "Amsterdam"
+    },
+    "operator": {
+      "legal_country_code": "NL",
+      "legal_name": "Canal Stays BV"
+    },
+    "accommodation_type": "hotel",
+    "subtotal": 600
+  },
+  "expected": {
+    "total_tax": 0,
+    "matched_rule_ids": []
+  }
+}

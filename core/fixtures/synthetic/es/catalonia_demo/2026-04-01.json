@@ -1,0 +1,44 @@
+{
+  "id": "es-catalonia-demo-2026",
+  "domain": "tourist_tax",
+  "lifecycle": "draft",
+  "jurisdiction": {
+    "country_code": "ES",
+    "country_name": "Spain",
+    "region_code": "ES-CT",
+    "region_name": "Catalonia"
+  },
+  "notes": "Synthetic Catalonia demo fixture for cross-border operator scenarios. Models a Barcelona property with a 7-night cap and under-17 exemption via age-filtered taxable guest count.",
+  "rules": [
+    {
+      "id": "es-ct-barcelona-2026-hotel",
+      "location_scope": {
+        "country_code": "ES",
+        "region_code": "ES-CT",
+        "locality_kind": "municipality",
+        "locality_code": "08019",
+        "locality_name": "Barcelona"
+      },
+      "valid_from": "2026-04-01",
+      "valid_to": null,
+      "applies_to": {
+        "accommodation_types": ["hotel", "apartment"]
+      },
+      "calculation": {
+        "kind": "generic.per_person_per_night",
+        "params": {
+          "amount": 3.5,
+          "max_nights": 7,
+          "taxable_guest_age_gte": 17
+        },
+        "currency": "EUR"
+      },
+      "source": {
+        "source_url": "https://atc.gencat.cat/es/tributs/ieet/",
+        "reviewed_at": null
+      },
+      "confidence": "reviewed",
+      "notes": "Synthetic TCK demo inspired by Catalonia's stay-unit cap and under-17 exemption."
+    }
+  ]
+}

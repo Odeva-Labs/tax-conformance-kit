@@ -37,7 +37,7 @@ func TestGeneratedRuleDateBoundaries(t *testing.T) {
 					Rules:            []model.Rule{rule},
 				}
 
-				onStartInput, err := buildApplicableBookingInput(rule, rule.ValidFrom)
+				onStartInput, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, rule.ValidFrom)
 				if err != nil {
 					t.Fatalf("build applicable booking input: %v", err)
 				}
@@ -50,7 +50,7 @@ func TestGeneratedRuleDateBoundaries(t *testing.T) {
 				}
 
 				beforeStartDate := mustShiftDate(t, rule.ValidFrom, -1)
-				beforeStartInput, err := buildApplicableBookingInput(rule, beforeStartDate)
+				beforeStartInput, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, beforeStartDate)
 				if err != nil {
 					t.Fatalf("build boundary booking input before valid_from: %v", err)
 				}
@@ -66,7 +66,7 @@ func TestGeneratedRuleDateBoundaries(t *testing.T) {
 					return
 				}
 
-				onEndInput, err := buildApplicableBookingInput(rule, *rule.ValidTo)
+				onEndInput, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, *rule.ValidTo)
 				if err != nil {
 					t.Fatalf("build applicable booking input on valid_to: %v", err)
 				}
@@ -79,7 +79,7 @@ func TestGeneratedRuleDateBoundaries(t *testing.T) {
 				}
 
 				afterEndDate := mustShiftDate(t, *rule.ValidTo, 1)
-				afterEndInput, err := buildApplicableBookingInput(rule, afterEndDate)
+				afterEndInput, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, afterEndDate)
 				if err != nil {
 					t.Fatalf("build boundary booking input after valid_to: %v", err)
 				}
@@ -116,7 +116,7 @@ func TestGeneratedPercentageOfBaseProperties(t *testing.T) {
 					Rules:            []model.Rule{rule},
 				}
 
-				zeroInput, err := buildApplicableBookingInput(rule, rule.ValidFrom)
+				zeroInput, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, rule.ValidFrom)
 				if err != nil {
 					t.Fatalf("build zero subtotal input: %v", err)
 				}
@@ -129,7 +129,7 @@ func TestGeneratedPercentageOfBaseProperties(t *testing.T) {
 					t.Fatalf("expected zero subtotal to yield zero tax, got %v", zeroResult.TotalTax)
 				}
 
-				lowInput, err := buildApplicableBookingInput(rule, rule.ValidFrom)
+				lowInput, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, rule.ValidFrom)
 				if err != nil {
 					t.Fatalf("build low subtotal input: %v", err)
 				}
@@ -199,7 +199,7 @@ func TestGeneratedTierBoundaries(t *testing.T) {
 					for _, nights := range sampleNights {
 						caseName := fmt.Sprintf("%d_nights", nights)
 						t.Run(caseName, func(t *testing.T) {
-							input, err := buildApplicableBookingInput(rule, rule.ValidFrom)
+							input, err := buildApplicableBookingInput(rule, ruleset.Jurisdiction, rule.ValidFrom)
 							if err != nil {
 								t.Fatalf("build applicable booking input: %v", err)
 							}
@@ -286,22 +286,40 @@ func readEngineRuleSetFixture(t *testing.T, path string) model.RuleSet {
 	return ruleset
 }
 
-func buildApplicableBookingInput(rule model.Rule, stayDate string) (model.BookingInput, error) {
-	differentMunicipality := "9999"
+func buildApplicableBookingInput(rule model.Rule, jurisdiction model.Jurisdiction, stayDate string) (model.BookingInput, error) {
+	differentLocality := "9999"
+	scope := rule.EffectiveLocationScope(jurisdiction)
 	input := model.BookingInput{
 		StayDate:                  stayDate,
 		Nights:                    1,
 		Adults:                    1,
 		Children:                  0,
-		MainGuestMunicipalityCode: &differentMunicipality,
-		PropertyMunicipalityCode:  rule.MunicipalityCode,
-		AccommodationType:         "hotel",
-		Subtotal:                  100,
-		AlreadySubjectTo:          []string{},
+		MainGuestMunicipalityCode: &differentLocality,
+		MainGuestResidence: &model.Location{
+			CountryCode:  scope.CountryCode,
+			RegionCode:   scope.RegionCode,
+			LocalityKind: scope.LocalityKind,
+			LocalityCode: differentLocality,
+		},
+		PropertyMunicipalityCode: scope.LocalityCode,
+		PropertyLocation: &model.Location{
+			CountryCode:  scope.CountryCode,
+			RegionCode:   scope.RegionCode,
+			LocalityKind: scope.LocalityKind,
+			LocalityCode: scope.LocalityCode,
+			LocalityName: scope.LocalityName,
+		},
+		AccommodationType: "hotel",
+		Subtotal:          100,
+		AlreadySubjectTo:  []string{},
 	}
 
 	if len(rule.AppliesTo.AccommodationTypes) > 0 {
 		input.AccommodationType = rule.AppliesTo.AccommodationTypes[0]
+	}
+	if _, ok := rule.Calculation.Params["taxable_guest_age_gte"]; ok {
+		adultAge := 30
+		input.Guests = []model.Guest{{Age: &adultAge, Role: "guest"}}
 	}
 
 	for _, predicate := range rule.Predicates {
@@ -327,14 +345,26 @@ func satisfyPredicate(input *model.BookingInput, predicate model.Predicate, targ
 	switch predicate.Kind {
 	case "guest.resident_of_same_municipality":
 		if target {
-			code := input.PropertyMunicipalityCode
+			code := input.EffectivePropertyLocation().LocalityCode
 			input.MainGuestMunicipalityCode = &code
+			input.MainGuestResidence = &model.Location{
+				CountryCode:  input.EffectivePropertyLocation().CountryCode,
+				RegionCode:   input.EffectivePropertyLocation().RegionCode,
+				LocalityKind: input.EffectivePropertyLocation().LocalityKind,
+				LocalityCode: code,
+			}
 		} else {
 			code := "9999"
-			if strings.EqualFold(code, input.PropertyMunicipalityCode) {
+			if strings.EqualFold(code, input.EffectivePropertyLocation().LocalityCode) {
 				code = "9998"
 			}
 			input.MainGuestMunicipalityCode = &code
+			input.MainGuestResidence = &model.Location{
+				CountryCode:  input.EffectivePropertyLocation().CountryCode,
+				RegionCode:   input.EffectivePropertyLocation().RegionCode,
+				LocalityKind: input.EffectivePropertyLocation().LocalityKind,
+				LocalityCode: code,
+			}
 		}
 	case "guest.age_below":
 		maxAge, err := getInt(params, "max_age")

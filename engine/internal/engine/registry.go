@@ -29,7 +29,13 @@ func init() {
 		if err != nil {
 			return 0, err
 		}
-		return amount * float64(totalGuests(input)) * float64(input.Nights), nil
+
+		taxableGuests, err := taxableGuestCount(params, input)
+		if err != nil {
+			return 0, err
+		}
+
+		return amount * float64(taxableGuests) * float64(cappedNights(params, input.Nights)), nil
 	})
 
 	RegisterCalculation("generic.fixed_amount", func(params map[string]any, input model.BookingInput) (float64, error) {
@@ -64,10 +70,15 @@ func init() {
 	})
 
 	RegisterPredicate("guest.resident_of_same_municipality", func(params map[string]any, input model.BookingInput) (bool, error) {
-		if input.MainGuestMunicipalityCode == nil {
+		residence := input.EffectiveMainGuestResidence()
+		if residence == nil {
 			return false, nil
 		}
-		return strings.EqualFold(*input.MainGuestMunicipalityCode, input.PropertyMunicipalityCode), nil
+		property := input.EffectivePropertyLocation()
+		if residence.LocalityCode == "" || property.LocalityCode == "" {
+			return false, nil
+		}
+		return strings.EqualFold(residence.LocalityCode, property.LocalityCode), nil
 	})
 
 	RegisterPredicate("guest.age_below", func(params map[string]any, input model.BookingInput) (bool, error) {
@@ -230,4 +241,33 @@ func GetCalculation(kind string) (CalculationHandler, bool) {
 func GetPredicate(kind string) (PredicateHandler, bool) {
 	handler, ok := predicateHandlers[kind]
 	return handler, ok
+}
+
+func cappedNights(params map[string]any, nights int) int {
+	maxNights, ok, err := getOptionalInt(params, "max_nights")
+	if !ok || err != nil || maxNights < 0 || nights < maxNights {
+		return nights
+	}
+	return maxNights
+}
+
+func taxableGuestCount(params map[string]any, input model.BookingInput) (int, error) {
+	minAge, ok, err := getOptionalInt(params, "taxable_guest_age_gte")
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return totalGuests(input), nil
+	}
+	if len(input.Guests) == 0 {
+		return 0, fmt.Errorf("taxable_guest_age_gte requires guests with ages")
+	}
+
+	count := 0
+	for _, guest := range input.Guests {
+		if guest.Age != nil && *guest.Age >= minAge {
+			count++
+		}
+	}
+	return count, nil
 }

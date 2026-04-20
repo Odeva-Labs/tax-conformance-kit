@@ -50,13 +50,15 @@
       }
     },
     "generic.per_person_per_night": {
-      "description": "Flat amount per guest per night. Guests = adults + children unless a predicate narrows the set.",
+      "description": "Flat amount per taxable guest per night. Guests = adults + children unless taxable_guest_age_gte narrows the count. max_nights caps the taxable stay units.",
       "since": "v1",
       "params_schema": {
         "type": "object",
         "required": ["amount"],
         "properties": {
-          "amount": { "type": "number", "minimum": 0 }
+          "amount": { "type": "number", "minimum": 0 },
+          "max_nights": { "type": "integer", "minimum": 0 },
+          "taxable_guest_age_gte": { "type": "integer", "minimum": 0 }
         },
         "additionalProperties": false
       }
