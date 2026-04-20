@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      GOCACHE: /tmp/tck-gocache
+      GOMODCACHE: /tmp/tck-gomodcache
 
     steps:
       - name: Checkout
@@ -35,7 +38,11 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: engines/go/go.mod
+          go-version-file: engine/go.mod
+          cache-dependency-path: engine/go.mod
+
+      - name: Ensure Go cache directories exist
+        run: mkdir -p "$GOCACHE" "$GOMODCACHE"
 
       - name: Setup just
         uses: extractions/setup-just@v2

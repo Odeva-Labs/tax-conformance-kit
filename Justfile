@@ -1,8 +1,8 @@
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 
-go_dir := "engines/go"
-amsterdam_rules := "../../core/fixtures/regulation/nl/gemeentelijke_verordening/amsterdam/2026-01-01.json"
-amsterdam_assessment_case := "../../core/fixtures/regulation/nl/gemeentelijke_verordening/amsterdam/conformance/quarterly_threshold_met.assessment.json"
+go_dir := "engine"
+amsterdam_rules := "../core/fixtures/regulation/nl/gemeentelijke_verordening/amsterdam/2026-01-01.json"
+amsterdam_assessment_case := "../core/fixtures/regulation/nl/gemeentelijke_verordening/amsterdam/conformance/quarterly_threshold_met.assessment.json"
 
 default:
   just --list
@@ -62,7 +62,7 @@ backfill-municipality-codes:
   cd {{go_dir}} && go run ./cmd/taxctl backfill-municipality-codes
 
 build-gem:
-  cd engines/go && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 GOOS=linux GOARCH=amd64 go build -o ../../clients/ruby/bin/taxctl ./cmd/taxctl
+  cd engine && env GOCACHE=/tmp/tck-gocache CCACHE_DISABLE=1 GOOS=linux GOARCH=amd64 go build -o ../clients/ruby/bin/taxctl ./cmd/taxctl
   mkdir -p clients/ruby/data
   cp -r core/fixtures/regulation clients/ruby/data/regulation
   cp core/schemas/kind-registry.v1.json clients/ruby/data/kind-registry.v1.json
