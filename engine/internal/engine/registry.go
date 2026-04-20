@@ -29,7 +29,44 @@ func init() {
 		if err != nil {
 			return 0, err
 		}
-		return amount * float64(totalGuests(input)) * float64(input.Nights), nil
+
+		taxableGuests, err := taxableGuestCount(params, input)
+		if err != nil {
+			return 0, err
+		}
+
+		return amount * float64(taxableGuests) * float64(cappedNights(params, input.Nights)), nil
+	})
+
+	RegisterCalculation("generic.per_person_per_night_discount_after_nights", func(params map[string]any, input model.BookingInput) (float64, error) {
+		amount, err := getFloat(params, "amount")
+		if err != nil {
+			return 0, err
+		}
+		discountStartNight, err := getInt(params, "discount_start_night")
+		if err != nil {
+			return 0, err
+		}
+		if discountStartNight < 1 {
+			return 0, fmt.Errorf("discount_start_night must be >= 1")
+		}
+		discountMultiplier, err := getFloat(params, "discount_multiplier")
+		if err != nil {
+			return 0, err
+		}
+
+		taxableGuests, err := taxableGuestCount(params, input)
+		if err != nil {
+			return 0, err
+		}
+
+		nights := cappedNights(params, input.Nights)
+		fullRateNights := min(nights, discountStartNight-1)
+		discountedNights := max(nights-fullRateNights, 0)
+
+		fullPortion := amount * float64(fullRateNights)
+		discountedPortion := amount * discountMultiplier * float64(discountedNights)
+		return float64(taxableGuests) * (fullPortion + discountedPortion), nil
 	})
 
 	RegisterCalculation("generic.fixed_amount", func(params map[string]any, input model.BookingInput) (float64, error) {
@@ -64,10 +101,15 @@ func init() {
 	})
 
 	RegisterPredicate("guest.resident_of_same_municipality", func(params map[string]any, input model.BookingInput) (bool, error) {
-		if input.MainGuestMunicipalityCode == nil {
+		residence := input.EffectiveMainGuestResidence()
+		if residence == nil {
 			return false, nil
 		}
-		return strings.EqualFold(*input.MainGuestMunicipalityCode, input.PropertyMunicipalityCode), nil
+		property := input.EffectivePropertyLocation()
+		if residence.LocalityCode == "" || property.LocalityCode == "" {
+			return false, nil
+		}
+		return strings.EqualFold(residence.LocalityCode, property.LocalityCode), nil
 	})
 
 	RegisterPredicate("guest.age_below", func(params map[string]any, input model.BookingInput) (bool, error) {
@@ -206,6 +248,18 @@ func init() {
 		}
 		return slices.Contains(input.AlreadySubjectTo, tax), nil
 	})
+
+	RegisterPredicate("location.property_locality_code_not_in", func(params map[string]any, input model.BookingInput) (bool, error) {
+		values, err := getStringSlice(params, "values")
+		if err != nil {
+			return false, err
+		}
+		code := input.EffectivePropertyLocation().LocalityCode
+		if code == "" {
+			return false, nil
+		}
+		return !slices.Contains(values, code), nil
+	})
 }
 
 func RegisterCalculation(kind string, handler CalculationHandler) {
@@ -230,4 +284,33 @@ func GetCalculation(kind string) (CalculationHandler, bool) {
 func GetPredicate(kind string) (PredicateHandler, bool) {
 	handler, ok := predicateHandlers[kind]
 	return handler, ok
+}
+
+func cappedNights(params map[string]any, nights int) int {
+	maxNights, ok, err := getOptionalInt(params, "max_nights")
+	if !ok || err != nil || maxNights < 0 || nights < maxNights {
+		return nights
+	}
+	return maxNights
+}
+
+func taxableGuestCount(params map[string]any, input model.BookingInput) (int, error) {
+	minAge, ok, err := getOptionalInt(params, "taxable_guest_age_gte")
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return totalGuests(input), nil
+	}
+	if len(input.Guests) == 0 {
+		return 0, fmt.Errorf("taxable_guest_age_gte requires guests with ages")
+	}
+
+	count := 0
+	for _, guest := range input.Guests {
+		if guest.Age != nil && *guest.Age >= minAge {
+			count++
+		}
+	}
+	return count, nil
 }

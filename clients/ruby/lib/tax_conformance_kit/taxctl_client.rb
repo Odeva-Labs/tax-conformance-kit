@@ -27,9 +27,27 @@ module TaxConformanceKit
       })
     end
 
+    def evaluate_resolved(booking_input:, fixture_root: nil, domain: nil, kind_registry: nil)
+      run_json("runtime-resolve-evaluate", {
+        fixture_root: fixture_root,
+        domain: domain,
+        booking_input: booking_input,
+        kind_registry: kind_registry
+      })
+    end
+
     def evaluate_assessment(ruleset:, assessment_input:, kind_registry: nil)
       run_json("runtime-evaluate-assessment", {
         ruleset: ruleset,
+        assessment_input: assessment_input,
+        kind_registry: kind_registry
+      })
+    end
+
+    def evaluate_resolved_assessment(assessment_input:, fixture_root: nil, domain: nil, kind_registry: nil)
+      run_json("runtime-resolve-evaluate-assessment", {
+        fixture_root: fixture_root,
+        domain: domain,
         assessment_input: assessment_input,
         kind_registry: kind_registry
       })

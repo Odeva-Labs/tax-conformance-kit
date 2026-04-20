@@ -1,0 +1,32 @@
+{
+  "id": "es-balearic-palma-hotel-4-star-high-season-long-stay",
+  "description": "Balearic high-season stays charge the first eight nights in full and reduce nights 9+ by 50%; guests under 16 remain exempt.",
+  "rule_set_path": "../2025-05-17.json",
+  "booking_input": {
+    "stay_date": "2026-07-10",
+    "nights": 10,
+    "adults": 2,
+    "children": 1,
+    "guests": [
+      { "age": 40, "role": "guest" },
+      { "age": 34, "role": "guest" },
+      { "age": 14, "role": "guest" }
+    ],
+    "property_location": {
+      "country_code": "ES",
+      "region_code": "ES-IB",
+      "locality_kind": "municipality",
+      "locality_name": "Palma"
+    },
+    "operator": {
+      "legal_country_code": "NL",
+      "legal_name": "Canal Stays BV"
+    },
+    "accommodation_type": "hotel_4_star",
+    "subtotal": 2200
+  },
+  "expected": {
+    "total_tax": 54.0,
+    "matched_rule_ids": ["es-ib-2025-hotel-4-star-high-season"]
+  }
+}

@@ -24,7 +24,7 @@ func Evaluate(input model.BookingInput, rs model.RuleSet) (model.EvaluationResul
 	}
 
 	for _, rule := range rs.Rules {
-		applies, evalErr := ruleApplies(rule, input, stayDate)
+		applies, evalErr := ruleApplies(rule, input, stayDate, rs.Jurisdiction)
 		if evalErr != nil {
 			return model.EvaluationResult{}, evalErr
 		}
@@ -51,8 +51,8 @@ func Evaluate(input model.BookingInput, rs model.RuleSet) (model.EvaluationResul
 	}, nil
 }
 
-func ruleApplies(rule model.Rule, input model.BookingInput, stayDate time.Time) (bool, error) {
-	if rule.MunicipalityCode != input.PropertyMunicipalityCode {
+func ruleApplies(rule model.Rule, input model.BookingInput, stayDate time.Time, jurisdiction model.Jurisdiction) (bool, error) {
+	if !matchesLocation(rule.EffectiveLocationScope(jurisdiction), input.EffectivePropertyLocation()) {
 		return false, nil
 	}
 
@@ -85,6 +85,25 @@ func ruleApplies(rule model.Rule, input model.BookingInput, stayDate time.Time) 
 	}
 
 	return true, nil
+}
+
+func matchesLocation(scope model.Location, actual model.Location) bool {
+	if scope.CountryCode != "" && !strings.EqualFold(scope.CountryCode, actual.CountryCode) {
+		return false
+	}
+	if scope.RegionCode != "" && !strings.EqualFold(scope.RegionCode, actual.RegionCode) {
+		return false
+	}
+	if scope.LocalityKind != "" && !strings.EqualFold(scope.LocalityKind, actual.LocalityKind) {
+		return false
+	}
+	if scope.LocalityCode != "" && !strings.EqualFold(scope.LocalityCode, actual.LocalityCode) {
+		return false
+	}
+	if scope.LocalityName != "" && actual.LocalityCode == "" && !strings.EqualFold(scope.LocalityName, actual.LocalityName) {
+		return false
+	}
+	return true
 }
 
 func evalPredicate(predicate model.Predicate, input model.BookingInput) (bool, error) {
@@ -142,6 +161,17 @@ func getInt(params map[string]any, key string) (int, error) {
 		return 0, err
 	}
 	return int(value), nil
+}
+
+func getOptionalInt(params map[string]any, key string) (int, bool, error) {
+	if _, ok := params[key]; !ok {
+		return 0, false, nil
+	}
+	value, err := getInt(params, key)
+	if err != nil {
+		return 0, true, err
+	}
+	return value, true, nil
 }
 
 func getString(params map[string]any, key string) (string, error) {

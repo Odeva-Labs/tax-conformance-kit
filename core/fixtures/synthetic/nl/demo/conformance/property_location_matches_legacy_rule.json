@@ -1,0 +1,24 @@
+{
+  "id": "synthetic-nl-demo-property-location-matches-legacy-rule",
+  "description": "Legacy municipality-coded NL rules still match when the booking uses the new property_location shape.",
+  "rule_set_path": "../2026-01-01.json",
+  "booking_input": {
+    "stay_date": "2026-06-01",
+    "nights": 2,
+    "adults": 2,
+    "children": 1,
+    "property_location": {
+      "country_code": "NL",
+      "region_code": "NL-NH",
+      "locality_kind": "municipality",
+      "locality_code": "0363",
+      "locality_name": "Amsterdam"
+    },
+    "accommodation_type": "camping",
+    "subtotal": 300
+  },
+  "expected": {
+    "total_tax": 15.0,
+    "matched_rule_ids": ["synthetic-camping-demo-2026"]
+  }
+}

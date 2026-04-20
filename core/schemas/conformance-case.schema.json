@@ -10,14 +10,10 @@
     "rule_set_path": { "type": "string" },
     "booking_input": {
       "type": "object",
-      "required": [
-        "stay_date",
-        "nights",
-        "adults",
-        "children",
-        "property_municipality_code",
-        "accommodation_type",
-        "subtotal"
+      "required": ["stay_date", "nights", "adults", "children", "accommodation_type", "subtotal"],
+      "anyOf": [
+        { "required": ["property_municipality_code"] },
+        { "required": ["property_location"] }
       ],
       "properties": {
         "stay_date": { "type": "string", "format": "date" },
@@ -39,7 +35,18 @@
           }
         },
         "main_guest_municipality_code": { "type": ["string", "null"] },
+        "main_guest_residence_location": { "$ref": "#/$defs/Location" },
         "property_municipality_code": { "type": "string" },
+        "property_location": { "$ref": "#/$defs/Location" },
+        "operator": {
+          "type": "object",
+          "properties": {
+            "legal_country_code": { "type": "string", "minLength": 2, "maxLength": 2 },
+            "legal_name": { "type": "string" },
+            "tax_registration": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
         "accommodation_type": { "type": "string" },
         "subtotal": { "type": "number", "minimum": 0 },
         "stay_purpose": {
@@ -76,6 +83,21 @@
           "type": "array",
           "items": { "type": "string" }
         }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "Location": {
+      "type": "object",
+      "properties": {
+        "country_code": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "country_name": { "type": "string" },
+        "region_code": { "type": "string" },
+        "region_name": { "type": "string" },
+        "locality_kind": { "type": "string" },
+        "locality_code": { "type": "string" },
+        "locality_name": { "type": "string" }
       },
       "additionalProperties": false
     }

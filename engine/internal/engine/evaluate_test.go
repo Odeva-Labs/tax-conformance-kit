@@ -251,6 +251,166 @@ func TestEvaluateDoesNotApplyAssessmentPolicyAtBookingLevel(t *testing.T) {
 	}
 }
 
+func TestEvaluateMatchesGenericLocationScopeForCrossBorderOperator(t *testing.T) {
+	rs := model.RuleSet{
+		Jurisdiction: model.Jurisdiction{
+			CountryCode: "ES",
+			CountryName: "Spain",
+			RegionCode:  "ES-CT",
+			RegionName:  "Catalonia",
+		},
+		Rules: []model.Rule{
+			{
+				ID: "es-ct-barcelona",
+				LocationScope: &model.Location{
+					CountryCode:  "ES",
+					RegionCode:   "ES-CT",
+					LocalityKind: "municipality",
+					LocalityCode: "08019",
+					LocalityName: "Barcelona",
+				},
+				ValidFrom: "2026-04-01",
+				AppliesTo: model.AppliesTo{AccommodationTypes: []string{"hotel"}},
+				Calculation: model.Calculation{
+					Kind: "generic.per_person_per_night",
+					Params: map[string]any{
+						"amount":                3.5,
+						"max_nights":            7.0,
+						"taxable_guest_age_gte": 17.0,
+					},
+				},
+			},
+		},
+	}
+
+	input := model.BookingInput{
+		StayDate: "2026-06-01",
+		Nights:   10,
+		Adults:   2,
+		Children: 1,
+		Guests: []model.Guest{
+			{Age: intPtr(34), Role: "guest"},
+			{Age: intPtr(38), Role: "guest"},
+			{Age: intPtr(15), Role: "guest"},
+		},
+		PropertyLocation: &model.Location{
+			CountryCode:  "ES",
+			RegionCode:   "ES-CT",
+			LocalityKind: "municipality",
+			LocalityCode: "08019",
+			LocalityName: "Barcelona",
+		},
+		Operator:          &model.Operator{LegalCountryCode: "NL", LegalName: "Canal Stays BV"},
+		AccommodationType: "hotel",
+	}
+
+	got, err := Evaluate(input, rs)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got.TotalTax != 49 {
+		t.Fatalf("expected capped adult-only tax of 49, got %v", got.TotalTax)
+	}
+	if len(got.MatchedRuleIDs) != 1 || got.MatchedRuleIDs[0] != "es-ct-barcelona" {
+		t.Fatalf("unexpected matched rules: %+v", got.MatchedRuleIDs)
+	}
+}
+
+func TestEvaluatePerPersonPerNightDiscountAfterNights(t *testing.T) {
+	rs := model.RuleSet{
+		Jurisdiction: model.Jurisdiction{
+			CountryCode: "ES",
+			RegionCode:  "ES-IB",
+		},
+		Rules: []model.Rule{
+			{
+				ID: "es-ib-hotel-4-star",
+				LocationScope: &model.Location{
+					CountryCode: "ES",
+					RegionCode:  "ES-IB",
+				},
+				ValidFrom: "2025-05-17",
+				AppliesTo: model.AppliesTo{AccommodationTypes: []string{"hotel_4_star"}},
+				Calculation: model.Calculation{
+					Kind: "generic.per_person_per_night_discount_after_nights",
+					Params: map[string]any{
+						"amount":                3.0,
+						"discount_start_night":  9.0,
+						"discount_multiplier":   0.5,
+						"taxable_guest_age_gte": 16.0,
+					},
+				},
+			},
+		},
+	}
+
+	input := model.BookingInput{
+		StayDate: "2026-07-10",
+		Nights:   10,
+		Adults:   2,
+		Children: 1,
+		Guests: []model.Guest{
+			{Age: intPtr(40), Role: "guest"},
+			{Age: intPtr(34), Role: "guest"},
+			{Age: intPtr(14), Role: "guest"},
+		},
+		PropertyLocation: &model.Location{
+			CountryCode: "ES",
+			RegionCode:  "ES-IB",
+		},
+		AccommodationType: "hotel_4_star",
+	}
+
+	got, err := Evaluate(input, rs)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got.TotalTax != 54 {
+		t.Fatalf("expected 54 tax, got %v", got.TotalTax)
+	}
+	if len(got.MatchedRuleIDs) != 1 || got.MatchedRuleIDs[0] != "es-ib-hotel-4-star" {
+		t.Fatalf("unexpected matched rules: %+v", got.MatchedRuleIDs)
+	}
+}
+
+func TestEvaluateLegacyMunicipalityRuleMatchesGenericPropertyLocation(t *testing.T) {
+	rs := model.RuleSet{
+		Jurisdiction: model.Jurisdiction{CountryCode: "NL"},
+		Rules: []model.Rule{
+			{
+				ID:               "r1",
+				MunicipalityCode: "0363",
+				ValidFrom:        "2026-01-01",
+				Calculation: model.Calculation{
+					Kind:   "generic.fixed_amount",
+					Params: map[string]any{"amount": 10.0},
+				},
+			},
+		},
+	}
+
+	input := model.BookingInput{
+		StayDate: "2026-06-01",
+		Nights:   1,
+		Adults:   1,
+		PropertyLocation: &model.Location{
+			CountryCode:  "NL",
+			LocalityKind: "municipality",
+			LocalityCode: "0363",
+			LocalityName: "Amsterdam",
+		},
+		AccommodationType: "hotel",
+	}
+
+	got, err := Evaluate(input, rs)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got.TotalTax != 10 {
+		t.Fatalf("expected 10 tax, got %v", got.TotalTax)
+	}
+}
+
 func TestValidateRuleSetRejectsUnknownKind(t *testing.T) {
 	rs := model.RuleSet{
 		Jurisdiction: model.Jurisdiction{CountryCode: "NL"},
@@ -276,6 +436,48 @@ func TestValidateRuleSetRejectsUnknownKind(t *testing.T) {
 
 	if err := ValidateRuleSet(rs, registry); err == nil {
 		t.Fatal("expected validation error for unknown calculation kind")
+	}
+}
+
+func TestValidateRuleSetAcceptsLocationScopeWithoutLegacyMunicipalityCode(t *testing.T) {
+	rs := model.RuleSet{
+		Jurisdiction: model.Jurisdiction{CountryCode: "ES"},
+		Rules: []model.Rule{
+			{
+				ID: "r1",
+				LocationScope: &model.Location{
+					CountryCode:  "ES",
+					RegionCode:   "ES-CT",
+					LocalityKind: "municipality",
+					LocalityCode: "08019",
+				},
+				ValidFrom: "2026-04-01",
+				Calculation: model.Calculation{
+					Kind:   "generic.fixed_amount",
+					Params: map[string]any{"amount": 5.0},
+				},
+			},
+		},
+	}
+
+	registry := model.KindRegistry{
+		Calculations: map[string]model.KindEntry{
+			"generic.fixed_amount": {
+				ParamsSchema: map[string]any{
+					"type":     "object",
+					"required": []any{"amount"},
+					"properties": map[string]any{
+						"amount": map[string]any{"type": "number", "minimum": 0.0},
+					},
+					"additionalProperties": false,
+				},
+			},
+		},
+		Predicates: map[string]model.KindEntry{},
+	}
+
+	if err := ValidateRuleSet(rs, registry); err != nil {
+		t.Fatalf("expected location_scope rule to validate, got %v", err)
 	}
 }
 

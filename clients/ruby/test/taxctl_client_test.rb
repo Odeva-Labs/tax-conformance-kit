@@ -65,6 +65,19 @@ module TaxConformanceKit
       assert_equal 1, response["result"]["matched_rule_ids"].length
     end
 
+    def test_evaluate_resolved_matches_barcelona_conformance_case
+      conformance = read_json("core", "fixtures", "regulation", "es", "impuesto_estancias_turisticas", "catalonia", "barcelona_city", "conformance", "dutch_operator_barcelona_hotel_5_star.json")
+
+      response = client.evaluate_resolved(
+        booking_input: conformance.fetch("booking_input")
+      )
+
+      assert_equal true, response["ok"]
+      assert_equal conformance.dig("expected", "total_tax"), response.dig("result", "total_tax")
+      assert_equal "es-catalonia-barcelona-city-2026-04-01", response["resolved_ruleset_id"]
+      assert_includes response["resolved_ruleset_path"], "/es/impuesto_estancias_turisticas/catalonia/barcelona_city/"
+    end
+
     def test_evaluate_assessment_matches_amsterdam_conformance_case
       conformance = read_json("core", "fixtures", "regulation", "nl", "gemeentelijke_verordening", "amsterdam", "conformance", "quarterly_threshold_met.assessment.json")
       ruleset = read_ruleset("regulation", "nl", "gemeentelijke_verordening", "amsterdam", "2026-01-01.json")
@@ -79,6 +92,59 @@ module TaxConformanceKit
       assert_equal conformance.dig("expected", "total_assessment_tax"), response.dig("result", "total_assessment_tax")
       assert_equal conformance.dig("expected", "booking_results"), response.dig("result", "booking_results")
       assert_equal 2, response["result"]["booking_results"].length
+    end
+
+    def test_evaluate_resolved_assessment_groups_cross_border_portfolio
+      response = client.evaluate_resolved_assessment(
+        assessment_input: {
+          period_start: "2026-07-01",
+          period_end: "2026-09-30",
+          bookings: [
+            {
+              stay_date: "2026-07-10",
+              nights: 10,
+              guests: [
+                { age: 34, role: "guest" },
+                { age: 38, role: "guest" },
+                { age: 15, role: "guest" }
+              ],
+              property_location: {
+                country_code: "ES",
+                region_code: "ES-CT",
+                locality_kind: "municipality",
+                locality_code: "08019",
+                locality_name: "Barcelona"
+              },
+              accommodation_type: "hotel_5_star"
+            },
+            {
+              stay_date: "2026-07-20",
+              nights: 10,
+              guests: [
+                { age: 40, role: "guest" },
+                { age: 34, role: "guest" },
+                { age: 14, role: "guest" }
+              ],
+              property_location: {
+                country_code: "ES",
+                region_code: "ES-IB",
+                locality_kind: "municipality",
+                locality_name: "Palma"
+              },
+              accommodation_type: "hotel_4_star"
+            }
+          ]
+        }
+      )
+
+      assert_equal true, response["ok"]
+      assert_equal 2, response["group_count"]
+      assert_equal 222.0, response["total_booking_tax"]
+      assert_equal 222.0, response["total_assessment_tax"]
+      assert_equal "es-catalonia-barcelona-city-2026-04-01", response.dig("resolved_assessments", 0, "resolved_ruleset_id")
+      assert_equal 168.0, response.dig("resolved_assessments", 0, "result", "total_assessment_tax")
+      assert_equal "es-balearic-islands-2025-05-17", response.dig("resolved_assessments", 1, "resolved_ruleset_id")
+      assert_equal 54.0, response.dig("resolved_assessments", 1, "result", "total_assessment_tax")
     end
 
     def test_evaluate_assessment_below_threshold_matches_conformance_case

@@ -31,6 +31,8 @@ require "tax_conformance_kit"
 
 client = TaxConformanceKit::TaxctlClient.new
 response = client.evaluate(ruleset: ruleset_hash, booking_input: booking_input_hash)
+resolved = client.evaluate_resolved(booking_input: booking_input_hash)
+grouped = client.evaluate_resolved_assessment(assessment_input: assessment_input_hash)
 ```
 
 ### Advanced: override `command:`

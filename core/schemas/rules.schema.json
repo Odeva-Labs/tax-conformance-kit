@@ -36,7 +36,7 @@
       "properties": {
         "period": {
           "type": "string",
-          "enum": ["calendar_month", "calendar_quarter", "calendar_year", "assessment_cycle"]
+          "enum": ["calendar_month", "calendar_quarter", "calendar_half_year", "calendar_year", "assessment_cycle"]
         },
         "minimum_assessment_amount": {
           "type": "object",
@@ -60,19 +60,17 @@
   "$defs": {
     "Rule": {
       "type": "object",
-      "required": [
-        "id",
-        "municipality_code",
-        "valid_from",
-        "calculation",
-        "source",
-        "confidence"
+      "required": ["id", "valid_from", "calculation", "source", "confidence"],
+      "anyOf": [
+        { "required": ["municipality_code"] },
+        { "required": ["location_scope"] }
       ],
       "properties": {
         "id": { "type": "string" },
         "municipality_code": { "type": "string" },
         "municipality_name": { "type": "string" },
         "region_code": { "type": "string" },
+        "location_scope": { "$ref": "#/$defs/Location" },
         "valid_from": { "type": "string", "format": "date" },
         "valid_to": { "type": ["string", "null"], "format": "date" },
         "applies_to": {
@@ -119,6 +117,19 @@
           "description": "Kind-specific parameters. Shape validated by kind-registry."
         },
         "currency": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "country_code": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "country_name": { "type": "string" },
+        "region_code": { "type": "string", "description": "ISO 3166-2 subdivision or equivalent regional code" },
+        "region_name": { "type": "string" },
+        "locality_kind": { "type": "string", "description": "Administrative level, e.g. municipality, province, island, district" },
+        "locality_code": { "type": "string" },
+        "locality_name": { "type": "string" }
       },
       "additionalProperties": false
     },

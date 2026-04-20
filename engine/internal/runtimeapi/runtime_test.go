@@ -1,6 +1,7 @@
 package runtimeapi
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
@@ -127,6 +128,115 @@ func TestEvaluateReturnsStructuredResult(t *testing.T) {
 	}
 	if response.Result.TotalTax != 0 {
 		t.Fatalf("expected exempt stay to produce zero tax, got %v", response.Result.TotalTax)
+	}
+}
+
+func TestResolveEvaluateReturnsResolvedRuleSet(t *testing.T) {
+	repoRoot := findRepoRoot(t)
+	registry := readKindRegistry(t, filepath.Join(repoRoot, "core", "schemas", "kind-registry.v1.json"))
+
+	response := ResolveEvaluate(model.RuntimeResolveEvaluateRequest{
+		FixtureRoot: filepath.Join(repoRoot, "core", "fixtures", "regulation"),
+		BookingInput: model.BookingInput{
+			StayDate: "2026-06-15",
+			Nights:   10,
+			Guests: []model.Guest{
+				{Age: intPtr(34), Role: "guest"},
+				{Age: intPtr(38), Role: "guest"},
+				{Age: intPtr(15), Role: "guest"},
+			},
+			PropertyLocation: &model.Location{
+				CountryCode:  "ES",
+				RegionCode:   "ES-CT",
+				LocalityKind: "municipality",
+				LocalityCode: "08019",
+				LocalityName: "Barcelona",
+			},
+			AccommodationType: "hotel_5_star",
+		},
+	}, registry)
+
+	if !response.OK {
+		t.Fatalf("expected resolution to pass, got %+v", response)
+	}
+	if response.Result == nil || response.Result.TotalTax != 168 {
+		t.Fatalf("expected resolved evaluation tax 168, got %+v", response.Result)
+	}
+	if response.ResolvedRuleSetID != "es-catalonia-barcelona-city-2026-04-01" {
+		t.Fatalf("unexpected resolved ruleset id %q", response.ResolvedRuleSetID)
+	}
+}
+
+func TestResolveEvaluateAssessmentGroupsByResolvedRuleSet(t *testing.T) {
+	repoRoot := findRepoRoot(t)
+	registry := readKindRegistry(t, filepath.Join(repoRoot, "core", "schemas", "kind-registry.v1.json"))
+
+	response := ResolveEvaluateAssessment(model.RuntimeResolveEvaluateAssessmentRequest{
+		FixtureRoot: filepath.Join(repoRoot, "core", "fixtures", "regulation"),
+		AssessmentInput: model.AssessmentInput{
+			PeriodStart: "2026-07-01",
+			PeriodEnd:   "2026-09-30",
+			Bookings: []model.BookingInput{
+				{
+					StayDate: "2026-07-10",
+					Nights:   10,
+					Guests: []model.Guest{
+						{Age: intPtr(34), Role: "guest"},
+						{Age: intPtr(38), Role: "guest"},
+						{Age: intPtr(15), Role: "guest"},
+					},
+					PropertyLocation: &model.Location{
+						CountryCode:  "ES",
+						RegionCode:   "ES-CT",
+						LocalityKind: "municipality",
+						LocalityCode: "08019",
+						LocalityName: "Barcelona",
+					},
+					AccommodationType: "hotel_5_star",
+				},
+				{
+					StayDate: "2026-07-20",
+					Nights:   10,
+					Guests: []model.Guest{
+						{Age: intPtr(40), Role: "guest"},
+						{Age: intPtr(34), Role: "guest"},
+						{Age: intPtr(14), Role: "guest"},
+					},
+					PropertyLocation: &model.Location{
+						CountryCode:  "ES",
+						RegionCode:   "ES-IB",
+						LocalityKind: "municipality",
+						LocalityName: "Palma",
+					},
+					AccommodationType: "hotel_4_star",
+				},
+			},
+		},
+	}, registry)
+
+	if !response.OK {
+		t.Fatalf("expected grouped resolution to pass, got %+v", response)
+	}
+	if response.GroupCount != 2 {
+		t.Fatalf("expected 2 groups, got %d", response.GroupCount)
+	}
+	if response.TotalBookingTax != 222 || response.TotalAssessmentTax != 222 {
+		t.Fatalf("expected aggregate taxes 222/222, got %v/%v", response.TotalBookingTax, response.TotalAssessmentTax)
+	}
+	if len(response.ResolvedAssessments) != 2 {
+		t.Fatalf("expected 2 resolved assessments, got %+v", response.ResolvedAssessments)
+	}
+	if response.ResolvedAssessments[0].ResolvedRuleSetID != "es-catalonia-barcelona-city-2026-04-01" {
+		t.Fatalf("unexpected first resolved ruleset %q", response.ResolvedAssessments[0].ResolvedRuleSetID)
+	}
+	if response.ResolvedAssessments[0].Result.TotalAssessmentTax != 168 {
+		t.Fatalf("expected first assessment tax 168, got %v", response.ResolvedAssessments[0].Result.TotalAssessmentTax)
+	}
+	if response.ResolvedAssessments[1].ResolvedRuleSetID != "es-balearic-islands-2025-05-17" {
+		t.Fatalf("unexpected second resolved ruleset %q", response.ResolvedAssessments[1].ResolvedRuleSetID)
+	}
+	if response.ResolvedAssessments[1].Result.TotalAssessmentTax != 54 {
+		t.Fatalf("expected second assessment tax 54, got %v", response.ResolvedAssessments[1].Result.TotalAssessmentTax)
 	}
 }
 

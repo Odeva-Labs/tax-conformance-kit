@@ -18,8 +18,11 @@ func ValidateRuleSet(rs model.RuleSet, registry model.KindRegistry) error {
 		if rule.ID == "" {
 			return fmt.Errorf("rule id is required")
 		}
-		if rule.MunicipalityCode == "" {
-			return fmt.Errorf("rule municipality_code is required")
+		if rule.MunicipalityCode == "" && rule.LocationScope == nil {
+			return fmt.Errorf("rule municipality_code or location_scope is required")
+		}
+		if rule.LocationScope != nil && rule.LocationScope.CountryCode == "" && rs.Jurisdiction.CountryCode == "" {
+			return fmt.Errorf("rule %s location_scope.country_code is required when ruleset jurisdiction.country_code is empty", rule.ID)
 		}
 		if rule.ValidFrom == "" {
 			return fmt.Errorf("rule valid_from is required")
