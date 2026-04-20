@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
@@ -29,6 +30,23 @@ type candidateRuleSet struct {
 	matchingRuleID string
 }
 
+type indexedRuleSet struct {
+	resolved ResolvedRuleSet
+	domain   string
+}
+
+type fixtureRuleSetIndex struct {
+	rulesets []indexedRuleSet
+}
+
+type fixtureRuleSetIndexCacheEntry struct {
+	once  sync.Once
+	index fixtureRuleSetIndex
+	err   error
+}
+
+var fixtureRuleSetIndexCache sync.Map
+
 func ResolveRuleSet(input model.BookingInput, req ResolveRuleSetRequest) (ResolvedRuleSet, error) {
 	if req.FixtureRoot == "" {
 		return ResolvedRuleSet{}, fmt.Errorf("fixture root is required")
@@ -47,26 +65,19 @@ func ResolveRuleSet(input model.BookingInput, req ResolveRuleSetRequest) (Resolv
 		domain = "tourist_tax"
 	}
 
+	searchRoot := resolveFixtureSearchRoot(req.FixtureRoot, property.CountryCode)
+	index, err := loadFixtureRuleSetIndex(searchRoot)
+	if err != nil {
+		return ResolvedRuleSet{}, err
+	}
+
 	candidates := make([]candidateRuleSet, 0)
-	err := filepath.WalkDir(req.FixtureRoot, func(path string, d fs.DirEntry, walkErr error) error {
-		if walkErr != nil {
-			return walkErr
-		}
-		if d.IsDir() {
-			return nil
-		}
-		if filepath.Ext(path) != ".json" || strings.Contains(filepath.ToSlash(path), "/conformance/") {
-			return nil
+	for _, entry := range index.rulesets {
+		if entry.domain != "" && entry.domain != domain {
+			continue
 		}
 
-		rs, err := readRuleSetFile(path)
-		if err != nil {
-			return err
-		}
-		if rs.Domain != "" && rs.Domain != domain {
-			return nil
-		}
-
+		rs := entry.resolved.RuleSet
 		score := -1
 		matchingRuleID := ""
 		for _, rule := range rs.Rules {
@@ -80,21 +91,14 @@ func ResolveRuleSet(input model.BookingInput, req ResolveRuleSetRequest) (Resolv
 			}
 		}
 		if score < 0 {
-			return nil
+			continue
 		}
 
 		candidates = append(candidates, candidateRuleSet{
-			resolved: ResolvedRuleSet{
-				Path:    filepath.ToSlash(path),
-				RuleSet: rs,
-			},
+			resolved:       entry.resolved,
 			score:          score,
 			matchingRuleID: matchingRuleID,
 		})
-		return nil
-	})
-	if err != nil {
-		return ResolvedRuleSet{}, err
 	}
 	if len(candidates) == 0 {
 		return ResolvedRuleSet{}, fmt.Errorf("no ruleset matched property location %s in %s", property.CountryCode, filepath.ToSlash(req.FixtureRoot))
@@ -125,6 +129,62 @@ func ResolveRuleSet(input model.BookingInput, req ResolveRuleSetRequest) (Resolv
 	}
 
 	return best.resolved, nil
+}
+
+func loadFixtureRuleSetIndex(root string) (fixtureRuleSetIndex, error) {
+	cacheKey := filepath.Clean(root)
+	entryValue, _ := fixtureRuleSetIndexCache.LoadOrStore(cacheKey, &fixtureRuleSetIndexCacheEntry{})
+	entry := entryValue.(*fixtureRuleSetIndexCacheEntry)
+	entry.once.Do(func() {
+		entry.index, entry.err = buildFixtureRuleSetIndex(cacheKey)
+	})
+	return entry.index, entry.err
+}
+
+func buildFixtureRuleSetIndex(root string) (fixtureRuleSetIndex, error) {
+	index := fixtureRuleSetIndex{
+		rulesets: make([]indexedRuleSet, 0),
+	}
+
+	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if d.IsDir() {
+			return nil
+		}
+		if filepath.Ext(path) != ".json" || strings.Contains(filepath.ToSlash(path), "/conformance/") {
+			return nil
+		}
+
+		rs, err := readRuleSetFile(path)
+		if err != nil {
+			return err
+		}
+
+		index.rulesets = append(index.rulesets, indexedRuleSet{
+			resolved: ResolvedRuleSet{
+				Path:    filepath.ToSlash(path),
+				RuleSet: rs,
+			},
+			domain: rs.Domain,
+		})
+		return nil
+	})
+	if err != nil {
+		return fixtureRuleSetIndex{}, err
+	}
+
+	return index, nil
+}
+
+func resolveFixtureSearchRoot(fixtureRoot, countryCode string) string {
+	countryDir := filepath.Join(fixtureRoot, strings.ToLower(strings.TrimSpace(countryCode)))
+	info, err := os.Stat(countryDir)
+	if err == nil && info.IsDir() {
+		return countryDir
+	}
+	return fixtureRoot
 }
 
 func ruleMatchesResolution(rule model.Rule, jurisdiction model.Jurisdiction, input model.BookingInput) (bool, int) {
