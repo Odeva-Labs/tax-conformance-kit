@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
 )
 
 func TestGenerateDraftFixturesWritesSafeRulesets(t *testing.T) {

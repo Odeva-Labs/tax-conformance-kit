@@ -11,7 +11,7 @@ module TaxConformanceKit
     end
 
     def go_dir
-      repo_root.join("engines/go")
+      repo_root.join("engine")
     end
 
     def registry_path

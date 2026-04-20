@@ -3,7 +3,7 @@ package engine
 import (
 	"testing"
 
-	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
 )
 
 func intPtr(v int) *int       { return &v }

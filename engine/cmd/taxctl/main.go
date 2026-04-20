@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/engine"
-	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/ingest/cvdr"
-	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/model"
-	"github.com/odeva-labs/tax-conformance-kit/engines/go/internal/runtimeapi"
+	"github.com/odeva-labs/tax-conformance-kit/engine/internal/engine"
+	"github.com/odeva-labs/tax-conformance-kit/engine/internal/ingest/cvdr"
+	"github.com/odeva-labs/tax-conformance-kit/engine/internal/model"
+	"github.com/odeva-labs/tax-conformance-kit/engine/internal/runtimeapi"
 )
 
 func main() {
