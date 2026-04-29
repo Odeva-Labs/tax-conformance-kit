@@ -64,5 +64,7 @@ jobs:
       - name: Publish gem
         working-directory: clients/ruby
         run: |
-          gem_file="$(ruby -e 'spec = Gem::Specification.load("tax-conformance-kit.gemspec"); puts spec.file_name')"
+          gemspec="tax_conformance_kit.gemspec"
+          test -f "$gemspec" || { echo "Missing gemspec: $gemspec"; exit 1; }
+          gem_file="$(ruby -e 'spec = Gem::Specification.load(ARGV.fetch(0)); abort("Invalid gemspec: #{ARGV.fetch(0)}") unless spec; puts spec.file_name' "$gemspec")"
           gem push "$gem_file"
