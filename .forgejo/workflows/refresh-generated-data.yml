@@ -10,6 +10,9 @@ jobs:
     runs-on: codeberg-tiny-lazy
     permissions:
       contents: write
+    outputs:
+      data_changed: ${{ steps.release.outputs.data_changed }}
+      new_version: ${{ steps.release.outputs.new_version }}
     env:
       GOCACHE: /tmp/tck-gocache
       GOMODCACHE: /tmp/tck-gomodcache
@@ -62,15 +65,19 @@ jobs:
           just generate /tmp/tck-cvdr-extract
 
       - name: Publish patch release when data changed
+        id: release
         env:
           TARGET_BRANCH: ${{ github.ref_name }}
         run: |
           if [ -z "$(git status --porcelain)" ]; then
             echo "Generated data is unchanged."
+            echo "data_changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           new_version="$(just bump-ruby-patch-version)"
+          echo "data_changed=true" >> "$GITHUB_OUTPUT"
+          echo "new_version=$new_version" >> "$GITHUB_OUTPUT"
 
           ruby -c scripts/bump_ruby_patch_version.rb
           ruby -I clients/ruby/lib -e 'require "tax_conformance_kit/version"; abort "version mismatch" unless TaxConformanceKit::VERSION == ARGV.fetch(0)' "$new_version"
@@ -84,3 +91,69 @@ jobs:
           git tag "ruby-v${new_version}"
           git push origin "HEAD:${TARGET_BRANCH:-master}"
           git push origin "ruby-v${new_version}"
+
+  publish-ruby:
+    needs: refresh
+    if: needs.refresh.outputs.data_changed == 'true'
+    runs-on: deploy
+    permissions:
+      contents: read
+    env:
+      GOCACHE: /tmp/tck-gocache
+      GOMODCACHE: /tmp/tck-gomodcache
+
+    steps:
+      - name: Checkout released tag
+        uses: https://code.forgejo.org/actions/checkout@v6
+        with:
+          ref: ruby-v${{ needs.refresh.outputs.new_version }}
+
+      - name: Setup Ruby
+        uses: https://github.com/ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0.3"
+
+      - name: Verify tag matches gem version
+        working-directory: clients/ruby
+        env:
+          NEW_VERSION: ${{ needs.refresh.outputs.new_version }}
+        run: |
+          version="$(ruby -I lib -e 'require "tax_conformance_kit/version"; puts TaxConformanceKit::VERSION')"
+          if [ "$NEW_VERSION" != "$version" ]; then
+            echo "tag ruby-v${NEW_VERSION} does not match gem version ${version}"
+            exit 1
+          fi
+
+      - name: Setup Go
+        uses: https://github.com/actions/setup-go@v6
+        with:
+          go-version-file: engine/go.mod
+          cache-dependency-path: engine/go.mod
+
+      - name: Ensure Go cache directories exist
+        run: mkdir -p "$GOCACHE" "$GOMODCACHE"
+
+      - name: Setup just
+        uses: https://github.com/taiki-e/install-action@just
+
+      - name: Build gem (compile taxctl + bundle data)
+        run: just build-gem
+
+      - name: Configure RubyGems credentials
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: |
+          mkdir -p ~/.gem
+          cat > ~/.gem/credentials <<EOF
+          ---
+          :rubygems_api_key: ${RUBYGEMS_API_KEY}
+          EOF
+          chmod 0600 ~/.gem/credentials
+
+      - name: Publish gem
+        working-directory: clients/ruby
+        run: |
+          gemspec="tax_conformance_kit.gemspec"
+          test -f "$gemspec" || { echo "Missing gemspec: $gemspec"; exit 1; }
+          gem_file="$(ruby -e 'spec = Gem::Specification.load(ARGV.fetch(0)); abort("Invalid gemspec: #{ARGV.fetch(0)}") unless spec; puts spec.file_name' "$gemspec")"
+          gem push "$gem_file"
