@@ -64,5 +64,5 @@ jobs:
       - name: Publish gem
         working-directory: clients/ruby
         run: |
-          version="$(ruby -I lib -e 'require "tax_conformance_kit/version"; puts TaxConformanceKit::VERSION')"
-          gem push "tax_conformance_kit-${version}.gem"
+          gem_file="$(ruby -e 'spec = Gem::Specification.load("tax-conformance-kit.gemspec"); puts spec.file_name')"
+          gem push "$gem_file"
