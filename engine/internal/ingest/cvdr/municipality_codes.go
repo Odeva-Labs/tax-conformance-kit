@@ -125,6 +125,27 @@ func ReadMunicipalityCatalog(path string) (MunicipalityCatalog, error) {
 	return catalog, nil
 }
 
+func MunicipalityCatalogDataEqual(a, b MunicipalityCatalog) bool {
+	if a.SchemaVersion != b.SchemaVersion || a.CountryCode != b.CountryCode {
+		return false
+	}
+	if a.Source.Kind != b.Source.Kind ||
+		a.Source.DatasetID != b.Source.DatasetID ||
+		a.Source.ReferenceYear != b.Source.ReferenceYear ||
+		a.Source.SourceURL != b.Source.SourceURL {
+		return false
+	}
+	if len(a.Municipalities) != len(b.Municipalities) {
+		return false
+	}
+	for i := range a.Municipalities {
+		if a.Municipalities[i] != b.Municipalities[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func LookupMunicipalityCode(catalog MunicipalityCatalog, name string) (MunicipalityMatch, bool) {
 	index := buildMunicipalityCatalogIndex(catalog)
 	key := normalizeMunicipalityName(name)

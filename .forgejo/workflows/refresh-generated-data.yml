@@ -1,0 +1,86 @@
+name: Refresh Generated Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 4 * * *"
+
+jobs:
+  refresh:
+    runs-on: codeberg-tiny-lazy
+    permissions:
+      contents: write
+    env:
+      GOCACHE: /tmp/tck-gocache
+      GOMODCACHE: /tmp/tck-gomodcache
+      CBS_DATASET_URL: https://datasets.cbs.nl/CSV/CBS/nl/86247NED
+      CBS_ARCHIVE_PATH: /tmp/cbs86247.zip
+      CVDR_HARVEST_LOOKBACK_DAYS: 45
+
+    steps:
+      - name: Checkout
+        uses: https://code.forgejo.org/actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: https://github.com/actions/setup-go@v5
+        with:
+          go-version-file: engine/go.mod
+          cache-dependency-path: engine/go.mod
+
+      - name: Setup Ruby
+        uses: https://github.com/ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4.9"
+
+      - name: Setup just
+        uses: https://github.com/taiki-e/install-action@just
+
+      - name: Ensure Go cache directories exist
+        run: mkdir -p "$GOCACHE" "$GOMODCACHE"
+
+      - name: Download CBS municipality dataset
+        run: curl -fsSL "$CBS_DATASET_URL" -o "$CBS_ARCHIVE_PATH"
+
+      - name: Refresh generated data
+        run: |
+          rm -rf /tmp/tck-cvdr-index /tmp/tck-cvdr-selection /tmp/tck-cvdr-extract
+          just import-municipality-codes "$CBS_ARCHIVE_PATH"
+          just backfill-municipality-codes
+          as_of="$(date -u +%F)"
+          harvest_start="$(date -u -d "${CVDR_HARVEST_LOOKBACK_DAYS} days ago" +%F)"
+          harvest_end="$(date -u -d "1 day" +%F)"
+          cd engine && go run ./cmd/taxctl harvest-cvdr \
+            -start-date "$harvest_start" \
+            -end-date-exclusive "$harvest_end" \
+            -output-dir /tmp/tck-cvdr-index
+          cd ..
+          just select /tmp/tck-cvdr-index "$as_of" /tmp/tck-cvdr-selection
+          just extract /tmp/tck-cvdr-selection /tmp/tck-cvdr-extract
+          just analyze /tmp/tck-cvdr-extract
+          just generate /tmp/tck-cvdr-extract
+
+      - name: Publish patch release when data changed
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Generated data is unchanged."
+            exit 0
+          fi
+
+          new_version="$(just bump-ruby-patch-version)"
+
+          ruby -c scripts/bump_ruby_patch_version.rb
+          ruby -I clients/ruby/lib -e 'require "tax_conformance_kit/version"; abort "version mismatch" unless TaxConformanceKit::VERSION == ARGV.fetch(0)' "$new_version"
+          cd clients/ruby && ruby -e 'spec = Gem::Specification.load("tax_conformance_kit.gemspec"); abort "invalid gemspec" unless spec'
+          cd ../..
+
+          git config user.name "codeberg-actions[bot]"
+          git config user.email "codeberg-actions[bot]@users.noreply.codeberg.org"
+          git add -A core/data core/fixtures clients/ruby/lib/tax_conformance_kit/version.rb clients/ruby/README.md
+          git commit -m "Refresh generated tax data"
+          git tag "ruby-v${new_version}"
+          git push origin "HEAD:${TARGET_BRANCH:-master}"
+          git push origin "ruby-v${new_version}"

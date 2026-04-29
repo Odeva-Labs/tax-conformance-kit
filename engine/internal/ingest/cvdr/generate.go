@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"time"
@@ -91,6 +92,13 @@ func GenerateDraftFixtures(req GenerateDraftFixturesRequest) (GenerateDraftFixtu
 			if !req.Overwrite || !canOverwriteGeneratedFixture(targetPath) {
 				result.SkippedExistingCount++
 				continue
+			}
+			existingRuleset, err := readGeneratedRuleSet(targetPath)
+			if err != nil {
+				return GenerateDraftFixturesResult{}, err
+			}
+			if generatedRuleSetDataEqual(existingRuleset, ruleset) {
+				preserveGeneratedRuleSourceMetadata(existingRuleset, &ruleset)
 			}
 		} else if err != nil && !os.IsNotExist(err) {
 			return GenerateDraftFixturesResult{}, err
@@ -210,6 +218,38 @@ func canOverwriteGeneratedFixture(path string) bool {
 		return false
 	}
 	return ruleset.Lifecycle == "draft" && strings.Contains(ruleset.Notes, "Auto-generated from CVDR publication analysis.")
+}
+
+func readGeneratedRuleSet(path string) (model.RuleSet, error) {
+	var ruleset model.RuleSet
+	if err := readJSON(path, &ruleset); err != nil {
+		return model.RuleSet{}, err
+	}
+	return ruleset, nil
+}
+
+func generatedRuleSetDataEqual(a, b model.RuleSet) bool {
+	a = normalizeGeneratedRuleSetSourceMetadata(a)
+	b = normalizeGeneratedRuleSetSourceMetadata(b)
+	return reflect.DeepEqual(a, b)
+}
+
+func normalizeGeneratedRuleSetSourceMetadata(ruleset model.RuleSet) model.RuleSet {
+	ruleset.Rules = append([]model.Rule(nil), ruleset.Rules...)
+	for idx := range ruleset.Rules {
+		ruleset.Rules[idx].Source.ScrapedAt = nil
+		ruleset.Rules[idx].Source.ReviewedAt = nil
+		ruleset.Rules[idx].Source.Reviewer = ""
+	}
+	return ruleset
+}
+
+func preserveGeneratedRuleSourceMetadata(existing model.RuleSet, generated *model.RuleSet) {
+	for idx := range generated.Rules {
+		generated.Rules[idx].Source.ScrapedAt = existing.Rules[idx].Source.ScrapedAt
+		generated.Rules[idx].Source.ReviewedAt = existing.Rules[idx].Source.ReviewedAt
+		generated.Rules[idx].Source.Reviewer = existing.Rules[idx].Source.Reviewer
+	}
 }
 
 func reconcileGeneratedFixtureValidityWindows(root string) error {

@@ -133,6 +133,39 @@ func TestBackfillMunicipalityCodes(t *testing.T) {
 	}
 }
 
+func TestMunicipalityCatalogDataEqualIgnoresVolatileImportMetadata(t *testing.T) {
+	t.Parallel()
+
+	left := MunicipalityCatalog{
+		SchemaVersion: "1",
+		CountryCode:   "NL",
+		ImportedAt:    "2026-04-17T12:34:01Z",
+		Source: MunicipalityCatalogSource{
+			Kind:          "cbs_statline_zip",
+			DatasetID:     "86247NED",
+			ReferenceYear: "2026",
+			SourceURL:     DefaultCBSMunicipalityDatasetURL,
+			ArchivePath:   "/tmp/old.zip",
+		},
+		Municipalities: []MunicipalityCatalogEntry{
+			{Code: "0363", Name: "Amsterdam"},
+		},
+	}
+	right := left
+	right.Municipalities = append([]MunicipalityCatalogEntry(nil), left.Municipalities...)
+	right.ImportedAt = "2026-04-18T12:34:01Z"
+	right.Source.ArchivePath = "/tmp/new.zip"
+
+	if !MunicipalityCatalogDataEqual(left, right) {
+		t.Fatalf("expected equivalent catalog data")
+	}
+
+	right.Municipalities[0].Name = "Amsterdam (gemeente)"
+	if MunicipalityCatalogDataEqual(left, right) {
+		t.Fatalf("expected municipality name change to be significant")
+	}
+}
+
 func writeTestMunicipalityZip(path string, rows [][]string) error {
 	file, err := os.Create(path)
 	if err != nil {

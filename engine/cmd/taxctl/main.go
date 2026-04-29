@@ -404,6 +404,14 @@ func importCBSMunicipalityCodesCmd(args []string) {
 	if err != nil {
 		fail(err.Error())
 	}
+	if existingCatalog, err := cvdr.ReadMunicipalityCatalog(*outputPath); err == nil {
+		if cvdr.MunicipalityCatalogDataEqual(existingCatalog, catalog) {
+			catalog.ImportedAt = existingCatalog.ImportedAt
+			catalog.Source.ArchivePath = existingCatalog.Source.ArchivePath
+		}
+	} else if !os.IsNotExist(err) {
+		fail(err.Error())
+	}
 	if err := os.MkdirAll(filepath.Dir(*outputPath), 0o755); err != nil {
 		fail(err.Error())
 	}

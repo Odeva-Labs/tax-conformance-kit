@@ -235,3 +235,93 @@ func TestGenerateDraftFixturesUsesMunicipalityCatalogAndReconcilesValidTo(t *tes
 		t.Fatalf("expected catalog-backed ruleset notes without TODO, got %q", newer.Notes)
 	}
 }
+
+func TestGenerateDraftFixturesPreservesSourceMetadataWhenContentIsUnchanged(t *testing.T) {
+	extractionDir := t.TempDir()
+	repoRoot := t.TempDir()
+	bundleDir := filepath.Join(extractionDir, "bundles", "CVDR754024", "CVDR754024_1")
+	if err := os.MkdirAll(bundleDir, 0o755); err != nil {
+		t.Fatalf("mkdir bundle: %v", err)
+	}
+
+	draft := DraftStub{
+		Jurisdiction: DraftJurisdiction{
+			CountryCode:      "NL",
+			CountryName:      "Netherlands",
+			MunicipalityName: "Stede Broec",
+		},
+		Source: DraftSource{
+			CVDRID:        "CVDR754024",
+			PreferredURL:  "https://lokaleregelgeving.overheid.nl/CVDR754024/1",
+			EffectiveFrom: "2026-01-01",
+		},
+		SuggestedFixturePath: "core/fixtures/regulation/nl/gemeentelijke_verordening/stede_broec/2026-01-01.json",
+	}
+	if err := writeJSONFile(filepath.Join(bundleDir, "draft.json"), draft); err != nil {
+		t.Fatalf("write draft: %v", err)
+	}
+	if err := writeJSONFile(filepath.Join(bundleDir, "analysis.json"), BundleAnalysis{
+		Source: draft.Source,
+		CandidateRules: []RuleCandidate{
+			{
+				ID:               "2026-01-01-rate-1",
+				MunicipalityName: "Stede Broec",
+				ValidFrom:        "2026-01-01",
+				Calculation: model.Calculation{
+					Kind:     "generic.per_person_per_night",
+					Params:   map[string]any{"amount": 2.0},
+					Currency: "EUR",
+				},
+			},
+		},
+	}); err != nil {
+		t.Fatalf("write analysis: %v", err)
+	}
+
+	result, err := GenerateDraftFixtures(GenerateDraftFixturesRequest{
+		ExtractionDir: extractionDir,
+		RepoRoot:      repoRoot,
+	})
+	if err != nil {
+		t.Fatalf("generate fixtures: %v", err)
+	}
+	if result.GeneratedCount != 1 {
+		t.Fatalf("expected initial fixture generation, got %+v", result)
+	}
+
+	target := filepath.Join(repoRoot, "core/fixtures/regulation/nl/gemeentelijke_verordening/stede_broec/2026-01-01.json")
+	var existing model.RuleSet
+	readJSONFile(t, target, &existing)
+	scrapedAt := "2026-04-17T12:34:01Z"
+	reviewedAt := "2026-04-18T12:34:01Z"
+	existing.Rules[0].Source.ScrapedAt = &scrapedAt
+	existing.Rules[0].Source.ReviewedAt = &reviewedAt
+	existing.Rules[0].Source.Reviewer = "reviewer"
+	if err := writeJSONFile(target, existing); err != nil {
+		t.Fatalf("write existing fixture: %v", err)
+	}
+
+	result, err = GenerateDraftFixtures(GenerateDraftFixturesRequest{
+		ExtractionDir: extractionDir,
+		RepoRoot:      repoRoot,
+		Overwrite:     true,
+	})
+	if err != nil {
+		t.Fatalf("regenerate fixtures: %v", err)
+	}
+	if result.GeneratedCount != 1 {
+		t.Fatalf("expected overwritten fixture, got %+v", result)
+	}
+
+	var regenerated model.RuleSet
+	readJSONFile(t, target, &regenerated)
+	if regenerated.Rules[0].Source.ScrapedAt == nil || *regenerated.Rules[0].Source.ScrapedAt != scrapedAt {
+		t.Fatalf("expected scraped_at to be preserved, got %+v", regenerated.Rules[0].Source.ScrapedAt)
+	}
+	if regenerated.Rules[0].Source.ReviewedAt == nil || *regenerated.Rules[0].Source.ReviewedAt != reviewedAt {
+		t.Fatalf("expected reviewed_at to be preserved, got %+v", regenerated.Rules[0].Source.ReviewedAt)
+	}
+	if regenerated.Rules[0].Source.Reviewer != "reviewer" {
+		t.Fatalf("expected reviewer to be preserved, got %q", regenerated.Rules[0].Source.Reviewer)
+	}
+}

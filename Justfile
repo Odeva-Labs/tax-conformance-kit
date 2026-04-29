@@ -25,6 +25,9 @@ test-ruby-client:
 test-ruby-gem:
   tmpdir="$(mktemp -d /tmp/tck-ruby-gem-XXXXXX)" && printf 'source "https://rubygems.org"\ngem "tax_conformance_kit", path: "%s/clients/ruby"\n' "{{justfile_directory()}}" > "$tmpdir/Gemfile" && cd "$tmpdir" && BUNDLE_PATH="$tmpdir/vendor/bundle" bundle install --local >/dev/null && BUNDLE_GEMFILE="$tmpdir/Gemfile" bundle exec ruby -e 'require "tax_conformance_kit"; puts TaxConformanceKit::VERSION'
 
+bump-ruby-patch-version:
+  @ruby scripts/bump_ruby_patch_version.rb
+
 validate rules=amsterdam_rules:
   cd {{go_dir}} && go run ./cmd/taxctl validate -rules {{rules}}
 
