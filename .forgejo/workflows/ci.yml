@@ -9,17 +9,17 @@ on:
 
 jobs:
   go:
-    runs-on: ubuntu-latest
+    runs-on: checks
     env:
       GOCACHE: /tmp/tck-gocache
       GOMODCACHE: /tmp/tck-gomodcache
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: https://code.forgejo.org/actions/checkout@v4
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: https://github.com/actions/setup-go@v5
         with:
           go-version-file: engine/go.mod
           cache-dependency-path: engine/go.mod
@@ -28,7 +28,7 @@ jobs:
         run: mkdir -p "$GOCACHE" "$GOMODCACHE"
 
       - name: Install just
-        uses: taiki-e/install-action@just
+        uses: https://github.com/taiki-e/install-action@just
 
       - name: Go vet
         run: just vet
@@ -37,17 +37,17 @@ jobs:
         run: just test
 
   ruby-client:
-    runs-on: ubuntu-latest
+    runs-on: checks
     env:
       GOCACHE: /tmp/tck-gocache
       GOMODCACHE: /tmp/tck-gomodcache
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: https://code.forgejo.org/actions/checkout@v4
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: https://github.com/actions/setup-go@v5
         with:
           go-version-file: engine/go.mod
           cache-dependency-path: engine/go.mod
@@ -56,12 +56,12 @@ jobs:
         run: mkdir -p "$GOCACHE" "$GOMODCACHE"
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: https://github.com/ruby/setup-ruby@v1
         with:
           ruby-version: "3.4"
 
       - name: Install just
-        uses: taiki-e/install-action@just
+        uses: https://github.com/taiki-e/install-action@just
 
       - name: Ruby client tests
         run: just test-ruby-client
