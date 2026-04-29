@@ -2,5 +2,10 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
-  ]
+  ],
+  "assignees": [
+    "ramonvansprundel@gmail.com"
+  ],
+  "minimumReleaseAge": "7 days"
 }
+
