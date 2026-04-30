@@ -1,11 +1,12 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "assignees": [
-    "ramonvansprundel@gmail.com"
-  ],
-  "minimumReleaseAge": "7 days"
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:recommended"],
+	"assignees": ["ramones"],
+	"minimumReleaseAge": "7 days",
+	"packageRules": [
+		{
+			"matchPackageNames": ["@apollo/client"],
+			"allowedVersions": "<4.0.0"
+		}
+	]
 }
-
