@@ -1,5 +1,5 @@
 {
-  "id": "nl-haarlem-2025-12-24",
+  "id": "nl-haarlem-2026-05-06",
   "domain": "tourist_tax",
   "lifecycle": "draft",
   "jurisdiction": {
@@ -16,12 +16,12 @@
   },
   "rules": [
     {
-      "id": "2025-12-24-rate",
+      "id": "2026-05-06-rate",
       "municipality_code": "0392",
       "municipality_name": "Haarlem",
       "region_code": "",
-      "valid_from": "2025-12-24",
-      "valid_to": "2026-05-05",
+      "valid_from": "2026-05-06",
+      "valid_to": null,
       "applies_to": {
         "accommodation_types": null
       },
@@ -49,22 +49,22 @@
         }
       ],
       "source": {
-        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/1",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/2",
         "cvdr_id": "CVDR752896",
-        "scraped_at": "2026-04-17T12:09:56Z",
+        "scraped_at": "2026-05-05T04:18:27Z",
         "reviewed_at": null,
         "reviewer": ""
       },
       "confidence": "scraped",
-      "notes": "Generated from tariff and heffingsmaatstaf articles. Reviewer must confirm exact accommodation scope and municipality code. Evidence articles: 6, 5"
+      "notes": "Generated from tariff and heffingsmaatstaf articles. Reviewer must confirm exact accommodation scope and municipality code. Evidence articles: 6, 5 Generated from CVDR analysis."
     },
     {
-      "id": "2025-12-24-rate-1",
+      "id": "2026-05-06-rate-1",
       "municipality_code": "0392",
       "municipality_name": "Haarlem",
       "region_code": "",
-      "valid_from": "2025-12-24",
-      "valid_to": "2026-05-05",
+      "valid_from": "2026-05-06",
+      "valid_to": null,
       "applies_to": {
         "accommodation_types": []
       },
@@ -91,22 +91,22 @@
         }
       ],
       "source": {
-        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/1",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/2",
         "cvdr_id": "CVDR752896",
-        "scraped_at": "2026-04-17T12:09:56Z",
+        "scraped_at": "2026-05-05T04:18:27Z",
         "reviewed_at": null,
         "reviewer": ""
       },
       "confidence": "scraped",
-      "notes": "Likely default tariff from the opening paragraph; reviewer must exclude specific reduced categories mentioned later in the same article. Evidence articles: 6"
+      "notes": "Likely default tariff from the opening paragraph; reviewer must exclude specific reduced categories mentioned later in the same article. Evidence articles: 6 Generated from CVDR analysis."
     },
     {
-      "id": "2025-12-24-rate-2",
+      "id": "2026-05-06-rate-2",
       "municipality_code": "0392",
       "municipality_name": "Haarlem",
       "region_code": "",
-      "valid_from": "2025-12-24",
-      "valid_to": "2026-05-05",
+      "valid_from": "2026-05-06",
+      "valid_to": null,
       "applies_to": {
         "accommodation_types": []
       },
@@ -133,22 +133,22 @@
         }
       ],
       "source": {
-        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/1",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/2",
         "cvdr_id": "CVDR752896",
-        "scraped_at": "2026-04-17T12:09:56Z",
+        "scraped_at": "2026-05-05T04:18:27Z",
         "reviewed_at": null,
         "reviewer": ""
       },
       "confidence": "scraped",
-      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 6"
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 6 Generated from CVDR analysis."
     },
     {
-      "id": "2025-12-24-rate-3",
+      "id": "2026-05-06-rate-3",
       "municipality_code": "0392",
       "municipality_name": "Haarlem",
       "region_code": "",
-      "valid_from": "2025-12-24",
-      "valid_to": "2026-05-05",
+      "valid_from": "2026-05-06",
+      "valid_to": null,
       "applies_to": {
         "accommodation_types": [
           "camping",
@@ -178,14 +178,14 @@
         }
       ],
       "source": {
-        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/1",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR752896/2",
         "cvdr_id": "CVDR752896",
-        "scraped_at": "2026-04-17T12:09:56Z",
+        "scraped_at": "2026-05-05T04:18:27Z",
         "reviewed_at": null,
         "reviewer": ""
       },
       "confidence": "scraped",
-      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 6"
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 6 Generated from CVDR analysis."
     }
   ]
 }
