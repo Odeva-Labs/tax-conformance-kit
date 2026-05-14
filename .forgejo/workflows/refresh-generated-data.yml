@@ -35,7 +35,7 @@ jobs:
       - name: Setup Ruby
         uses: https://github.com/ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.3"
+          ruby-version: "4.0.4"
 
       - name: Setup just
         uses: https://github.com/taiki-e/install-action@just
@@ -111,7 +111,7 @@ jobs:
       - name: Setup Ruby
         uses: https://github.com/ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0.3"
+          ruby-version: "4.0.4"
 
       - name: Verify tag matches gem version
         working-directory: clients/ruby
