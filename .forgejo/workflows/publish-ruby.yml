@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: https://code.forgejo.org/actions/checkout@v6.0.3
+        uses: https://code.forgejo.org/actions/checkout@v7.0.0
 
       - name: Checkout requested release tag
         id: release

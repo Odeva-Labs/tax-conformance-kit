@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: https://code.forgejo.org/actions/checkout@v6.0.3
+        uses: https://code.forgejo.org/actions/checkout@v7.0.0
         with:
           fetch-depth: 0
 
@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - name: Checkout released tag
-        uses: https://code.forgejo.org/actions/checkout@v6.0.3
+        uses: https://code.forgejo.org/actions/checkout@v7.0.0
         with:
           ref: ruby-v${{ needs.refresh.outputs.new_version }}
 
