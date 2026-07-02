@@ -7,7 +7,7 @@ Thin Ruby client for the `tax-conformance-kit` Go runtime.
 Bundler (RubyGems):
 
 ```ruby
-gem "tax_conformance_kit", "~> 0.2.2"
+gem "tax_conformance_kit", "~> 0.2.3"
 ```
 
 Path dependency (for local development):
