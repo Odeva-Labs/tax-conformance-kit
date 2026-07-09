@@ -56,7 +56,7 @@ jobs:
         run: mkdir -p "$GOCACHE" "$GOMODCACHE"
 
       - name: Setup Ruby
-        uses: https://github.com/ruby/setup-ruby@v1.315.0
+        uses: https://github.com/ruby/setup-ruby@v1.316.0
         with:
           ruby-version: "4.0.5"
 
