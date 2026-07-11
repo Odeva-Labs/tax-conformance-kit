@@ -1,5 +1,5 @@
 {
-  "id": "nl-aalten-2025-12-20",
+  "id": "nl-aalten-2027-01-01",
   "domain": "tourist_tax",
   "lifecycle": "draft",
   "jurisdiction": {
@@ -11,27 +11,24 @@
   "notes": "Auto-generated from CVDR publication analysis. Source-backed draft only; review required before conformance use.",
   "assessment_policy": {
     "period": "calendar_year",
-    "minimum_assessment_amount": {
-      "amount": 10,
-      "currency": "EUR"
-    },
-    "notes": "Assessment period inferred from the belastingtijdvak article. Minimum assessment amount inferred from the aanslaggrens article."
+    "minimum_assessment_amount": null,
+    "notes": "Assessment period inferred from the belastingtijdvak article."
   },
   "rules": [
     {
-      "id": "2025-12-20-rate-1",
+      "id": "2027-01-01-rate-1",
       "municipality_code": "0197",
       "municipality_name": "Aalten",
       "region_code": "",
-      "valid_from": "2025-12-20",
-      "valid_to": "2026-12-31",
+      "valid_from": "2027-01-01",
+      "valid_to": null,
       "applies_to": {
         "accommodation_types": []
       },
       "calculation": {
         "kind": "generic.per_person_per_night",
         "params": {
-          "amount": 1.55
+          "amount": 1.6
         },
         "currency": "EUR"
       },
@@ -48,23 +45,17 @@
         {
           "kind": "stay.coa_asylum_housing",
           "params": null
-        },
-        {
-          "kind": "cross_tax.already_subject_to",
-          "params": {
-            "tax": "forensenbelasting"
-          }
         }
       ],
       "source": {
-        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR751414/1",
-        "cvdr_id": "CVDR751414",
-        "scraped_at": "2026-04-17T12:09:56Z",
+        "source_url": "https://lokaleregelgeving.overheid.nl/CVDR764168/1",
+        "cvdr_id": "CVDR764168",
+        "scraped_at": "2026-07-11T04:19:24Z",
         "reviewed_at": null,
         "reviewer": ""
       },
       "confidence": "scraped",
-      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 6"
+      "notes": "Generated from tariff article. Reviewer must confirm category boundaries and exclusions. Evidence articles: 7 Generated from CVDR analysis."
     }
   ]
 }
