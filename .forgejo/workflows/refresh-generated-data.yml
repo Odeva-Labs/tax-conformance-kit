@@ -33,7 +33,7 @@ jobs:
           cache-dependency-path: engine/go.mod
 
       - name: Setup Ruby
-        uses: https://github.com/ruby/setup-ruby@v1.317.0
+        uses: https://github.com/ruby/setup-ruby@v1.318.0
         with:
           ruby-version: "4.0.6"
 
@@ -109,7 +109,7 @@ jobs:
           ref: ruby-v${{ needs.refresh.outputs.new_version }}
 
       - name: Setup Ruby
-        uses: https://github.com/ruby/setup-ruby@v1.317.0
+        uses: https://github.com/ruby/setup-ruby@v1.318.0
         with:
           ruby-version: "4.0.6"
 
