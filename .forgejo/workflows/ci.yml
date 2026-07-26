@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: https://code.forgejo.org/actions/checkout@v7.0.0
+        uses: https://code.forgejo.org/actions/checkout@v7.0.1
 
       - name: Setup Go
         uses: https://github.com/actions/setup-go@v6.5.0
@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: https://code.forgejo.org/actions/checkout@v7.0.0
+        uses: https://code.forgejo.org/actions/checkout@v7.0.1
 
       - name: Setup Go
         uses: https://github.com/actions/setup-go@v6.5.0
