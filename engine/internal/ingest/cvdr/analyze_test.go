@@ -231,6 +231,60 @@ func TestAnalyzeExtractedBundlesDoesNotTreatStandplaatsAnnualAmountsAsNightlyRat
 	}
 }
 
+func TestAnalyzeExtractedBundlesDoesNotTreatAnnualAmountsAsNightlyRatesWhenAccommodationTypePresent(t *testing.T) {
+	dir := t.TempDir()
+	bundleDir := filepath.Join(dir, "bundles", "CVDR999999", "CVDR999999_1")
+	if err := os.MkdirAll(bundleDir, 0o755); err != nil {
+		t.Fatalf("mkdir bundle: %v", err)
+	}
+
+	draft := DraftStub{
+		Source: DraftSource{
+			CVDRID:        "CVDR999999",
+			Identifier:    "CVDR999999_1",
+			EffectiveFrom: "2026-01-01",
+		},
+		Jurisdiction: DraftJurisdiction{
+			MunicipalityName: "Testhorst",
+		},
+		SuggestedFixturePath: "core/fixtures/regulation/nl/gemeentelijke_verordening/testhorst/2026-01-01.json",
+	}
+	if err := writeJSONFile(filepath.Join(bundleDir, "draft.json"), draft); err != nil {
+		t.Fatalf("write draft: %v", err)
+	}
+
+	xml := `<?xml version="1.0" encoding="utf-8"?><cvdr><body><regeling><regeling-tekst>` +
+		`<artikel><kop><nr>1.</nr><titel>Belastbaar feit</titel></kop><al>Onder de naam toeristenbelasting wordt een directe belasting geheven door personen die niet als ingezetene met een adres in de gemeente zijn ingeschreven.</al></artikel>` +
+		`<artikel><kop><nr>6.</nr><titel>Belastingtarief</titel></kop><lijst><li nr="1."><al>Het tarief bedraagt per persoon per overnachting € 2,50.</al></li><li nr="2."><al>Voor vaste standplaatsen op een kampeerterrein bedraagt het tarief per jaar € 350,00.</al></li><li nr="3."><al>Voor ligplaatsen in een haven bedraagt het tarief per kalenderjaar € 480,00.</al></li></lijst></artikel>` +
+		`</regeling-tekst></regeling></body></cvdr>`
+	if err := os.WriteFile(filepath.Join(bundleDir, "publication.xml"), []byte(xml), 0o644); err != nil {
+		t.Fatalf("write xml: %v", err)
+	}
+
+	_, err := AnalyzeExtractedBundles(AnalyzeRequest{ExtractionDir: dir})
+	if err != nil {
+		t.Fatalf("unexpected analyze error: %v", err)
+	}
+
+	var analysis BundleAnalysis
+	readJSONFile(t, filepath.Join(bundleDir, "analysis.json"), &analysis)
+	if len(analysis.CandidateRules) != 1 {
+		t.Fatalf("expected only the single nightly rule, got %+v", analysis.CandidateRules)
+	}
+	for _, candidate := range analysis.CandidateRules {
+		amount, _ := candidate.Calculation.Params["amount"].(float64)
+		if amount != 2.50 {
+			t.Fatalf("expected only the €2,50 nightly rate, got %+v", candidate)
+		}
+		if candidate.Calculation.Kind != "generic.per_person_per_night" {
+			t.Fatalf("unexpected calculation kind: %+v", candidate)
+		}
+	}
+	if !containsWarning(analysis.Warnings, "standplaats") {
+		t.Fatalf("expected standplaats warning, got %+v", analysis.Warnings)
+	}
+}
+
 func containsPredicate(predicates []model.Predicate, kind string) bool {
 	for _, predicate := range predicates {
 		if predicate.Kind == kind {

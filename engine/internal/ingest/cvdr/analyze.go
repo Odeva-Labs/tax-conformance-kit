@@ -604,6 +604,8 @@ func inferRateAmountAndKind(chunk string, inheritedUnit rateUnit) (float64, stri
 	switch {
 	case strings.Contains(lower, "procent"):
 		return 0, "", false
+	case hasExplicitNonNightUnit(chunk):
+		return 0, "", false
 	case strings.Contains(lower, "per persoon per overnachting"),
 		strings.Contains(lower, "per persoon, per overnachting"),
 		strings.Contains(lower, "per persoon per nacht"),
@@ -626,6 +628,20 @@ func hasExplicitNightUnit(text string) bool {
 		strings.Contains(lower, "per persoon, per nacht") ||
 		strings.Contains(lower, "per overnachting") ||
 		strings.Contains(lower, "per nacht")
+}
+
+func hasExplicitNonNightUnit(text string) bool {
+	lower := strings.ToLower(text)
+	return strings.Contains(lower, "per jaar") ||
+		strings.Contains(lower, "per kalenderjaar") ||
+		strings.Contains(lower, "per seizoen") ||
+		strings.Contains(lower, "per maand") ||
+		strings.Contains(lower, "per kalendermaand") ||
+		strings.Contains(lower, "per week") ||
+		strings.Contains(lower, "per standplaats") ||
+		strings.Contains(lower, "per ligplaats") ||
+		strings.Contains(lower, "jaarbedrag") ||
+		strings.Contains(lower, "seizoenbedrag")
 }
 
 func firstEuro(text string) (float64, bool) {
