@@ -1,3 +1,3 @@
 module github.com/odeva-labs/tax-conformance-kit/engine
 
-go 1.26.5
+go 1.26.6
